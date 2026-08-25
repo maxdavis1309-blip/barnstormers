@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,420;0,9..144,560;1,9..144,380;1,9..144,480&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Geist+Mono:wght@400;500;600&display=swap">
 
 <style>
 /* ============================================================
@@ -19,14 +19,14 @@
    cards reserved for paid placement, 44px targets.
    ============================================================ */
 :root{
-  --paper:#fafafa;            /* page background (muted well) */
+  --paper:#f7f6f3;            /* page background (muted well) */
   --surface:#ffffff;          /* cards */
-  --sunk:#f4f4f5;             /* muted */
-  --ink:#18181b;              /* foreground */
-  --ink-2:#3f3f46;            /* secondary text */
-  --ink-3:#616169;            /* muted-foreground */
-  --rule:#e4e4e7;             /* border */
-  --rule-2:#efeff1;           /* subtle border */
+  --sunk:#f0eee9;             /* muted */
+  --ink:#141821;              /* foreground */
+  --ink-2:#3d434f;            /* secondary text */
+  --ink-3:#5d6470;            /* muted-foreground */
+  --rule:#e4e2dc;             /* border */
+  --rule-2:#eeece7;           /* subtle border */
 
   /* brand accent — Creative Tim orange (token keeps its legacy name) */
   --magenta:#f0941f;          /* orange-600 */
@@ -39,9 +39,10 @@
   --caution:#b45309;--caution-wash:#fffbeb;
   --warn:#dc2626;   --warn-wash:#fef2f2;
 
-  --ui:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
-  --cond:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
-  --prose:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --ui:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --cond:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --prose:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
   --data:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
@@ -52,10 +53,10 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --paper:#121214; --surface:#1b1b1e; --sunk:#26262b;
-    --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a1a1aa;
+    --paper:#070a12; --surface:#0e1420; --sunk:#141b29;
+    --ink:#f4f2ec; --ink-2:#cfd4dd; --ink-3:#9aa2b1;
     --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.06);
-    --magenta:#f97316; --magenta-2:#fb923c; --magenta-wash:rgba(249,115,22,.14);--accent-text:#f97316; --on-accent:#1a1006;
+    --magenta:#f0941f; --magenta-2:#f8a94a; --magenta-wash:rgba(240,148,31,.15);--accent-text:#f0941f; --on-accent:#1a1006;
     --blue:#60a5fa; --blue-wash:rgba(59,130,246,.14);
     --ok:#34d399; --ok-wash:rgba(16,185,129,.13);
     --caution:#fbbf24; --caution-wash:rgba(245,158,11,.13);
@@ -65,10 +66,10 @@
   }
 }
 :root[data-theme="dark"]{
-  --paper:#121214; --surface:#1b1b1e; --sunk:#26262b;
-  --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a1a1aa;
+  --paper:#070a12; --surface:#0e1420; --sunk:#141b29;
+  --ink:#f4f2ec; --ink-2:#cfd4dd; --ink-3:#9aa2b1;
   --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.06);
-  --magenta:#f97316; --magenta-2:#fb923c; --magenta-wash:rgba(249,115,22,.14);--accent-text:#f97316; --on-accent:#1a1006;
+  --magenta:#f0941f; --magenta-2:#f8a94a; --magenta-wash:rgba(240,148,31,.15);--accent-text:#f0941f; --on-accent:#1a1006;
   --blue:#60a5fa; --blue-wash:rgba(59,130,246,.14);
   --ok:#34d399; --ok-wash:rgba(16,185,129,.13);
   --caution:#fbbf24; --caution-wash:rgba(245,158,11,.13);
@@ -710,6 +711,47 @@ main.page.enter{animation:pageIn .22s var(--ease) both}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toast{background:#fafafa;color:#18181b;border-color:transparent}}
 .toast.show{opacity:1;transform:none}
 
+
+/* ============================================================
+   BRAND ALIGNMENT LAYER - match index.html visual system
+   (Fraunces display, navy header/hero, amber accents)
+   ============================================================ */
+h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
+.dtitle{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
+.sechead h2{font-family:var(--serif);font-weight:560;font-size:17px}
+.dprice{font-family:var(--serif);font-weight:560;color:var(--accent-text)}
+.dprice.none{font-family:var(--ui);color:var(--ink-3)}
+.rprice{font-family:var(--serif);font-weight:560;font-size:15.5px}
+.rprice.none{font-family:var(--ui);font-weight:400}
+.rprice.odd{color:var(--ink-3)}
+.feat .fp{font-family:var(--serif);font-weight:560;font-size:14px;color:var(--accent-text)}
+.pz{font-family:var(--serif);font-weight:560}
+/* navy header in both themes - mirrors the homepage nav */
+.hdr{background:#070a12;border-bottom:1px solid rgba(255,255,255,.08)}
+.hdr .brand{color:#f4f2ec}
+.hdr .brand .wordmark small{color:#9aa2b1}
+.navlinks a{color:#c6ccd8}
+.navlinks a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.navlinks a.on{color:#fff}
+.mobnav{background:#070a12;border-top:1px solid rgba(255,255,255,.08)}
+.mobnav a{color:#c6ccd8}
+.mobnav a.on{color:#fff}
+.hdr .searchbar{background:#fff;border-color:rgba(255,255,255,.16)}
+.hdr .searchbar input{color:#141821}
+.hdr .searchbar input::placeholder{color:#5d6470}
+.hdr .searchbar button{color:#5d6470}
+.hdr .searchbar button:hover{color:#141821;background:#f0eee9}
+/* navy hero card on the app home - mirrors the homepage hero */
+.hero.compact{background:#070a12;border-color:#070a12}
+.hero.compact h1{color:#f4f2ec;font-size:clamp(19px,2.6vw,25px)}
+.hero.compact .searchbar.big{background:#fff;border-color:transparent}
+.hero.compact .searchbar.big input{color:#141821}
+.hero.compact .searchbar.big input::placeholder{color:#5d6470}
+.hero.compact .searchhint{color:#9aa2b1}
+.hero.compact .searchhint button{color:#e8e6df}
+.hero.compact .searchhint button:hover{color:#f0941f;background:rgba(255,255,255,.08)}
+.hero.compact .quick a{background:#fff;color:#3d434f;border-color:transparent}
+.hero.compact .quick a:hover{background:#f0eee9;color:#141821}
 </style>
 
 
