@@ -1,0 +1,2323 @@
+<title>Barnstormers Modernized</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   Barnstormers Modernized — visual layer v2
+   Design language derived from Creative Tim UI
+   (github.com/creativetimofficial/ui, MIT) — shadcn/ui base,
+   orange brand accent, emerald/amber/red/blue status colors,
+   10px radius, pill badges, muted washes, no decorative gradients.
+   Business rules unchanged: newest-first, free-vs-paid hierarchy,
+   cards reserved for paid placement, 44px targets.
+   ============================================================ */
+:root{
+  --paper:#fafafa;            /* page background (muted well) */
+  --surface:#ffffff;          /* cards */
+  --sunk:#f4f4f5;             /* muted */
+  --ink:#18181b;              /* foreground */
+  --ink-2:#3f3f46;            /* secondary text */
+  --ink-3:#71717a;            /* muted-foreground */
+  --rule:#e4e4e7;             /* border */
+  --rule-2:#efeff1;           /* subtle border */
+
+  /* brand accent — Creative Tim orange (token keeps its legacy name) */
+  --magenta:#ea580c;          /* orange-600 */
+  --magenta-2:#c2410c;        /* orange-700 hover */
+  --magenta-wash:#fff3ea;     /* orange wash */
+  --on-accent:#ffffff;
+
+  --blue:#2563eb;   --blue-wash:#eff6ff;
+  --ok:#059669;     --ok-wash:#ecfdf5;
+  --caution:#b45309;--caution-wash:#fffbeb;
+  --warn:#dc2626;   --warn-wash:#fef2f2;
+
+  --ui:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --cond:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --prose:"Geist",ui-sans-serif,system-ui,"Segoe UI",Arial,sans-serif;
+  --data:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+  --r:10px;--r-lg:14px;--r-full:999px;
+  --shadow:0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:0 1px 2px rgba(0,0,0,.05),0 8px 24px -12px rgba(24,24,27,.18);
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121214; --surface:#1b1b1e; --sunk:#26262b;
+    --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a1a1aa;
+    --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.06);
+    --magenta:#f97316; --magenta-2:#fb923c; --magenta-wash:rgba(249,115,22,.14); --on-accent:#ffffff;
+    --blue:#60a5fa; --blue-wash:rgba(59,130,246,.14);
+    --ok:#34d399; --ok-wash:rgba(16,185,129,.13);
+    --caution:#fbbf24; --caution-wash:rgba(245,158,11,.13);
+    --warn:#f87171; --warn-wash:rgba(239,68,68,.13);
+    --shadow:0 1px 2px rgba(0,0,0,.45);
+    --shadow-md:0 1px 2px rgba(0,0,0,.45),0 10px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121214; --surface:#1b1b1e; --sunk:#26262b;
+  --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a1a1aa;
+  --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.06);
+  --magenta:#f97316; --magenta-2:#fb923c; --magenta-wash:rgba(249,115,22,.14); --on-accent:#ffffff;
+  --blue:#60a5fa; --blue-wash:rgba(59,130,246,.14);
+  --ok:#34d399; --ok-wash:rgba(16,185,129,.13);
+  --caution:#fbbf24; --caution-wash:rgba(245,158,11,.13);
+  --warn:#f87171; --warn-wash:rgba(239,68,68,.13);
+  --shadow:0 1px 2px rgba(0,0,0,.45);
+  --shadow-md:0 1px 2px rgba(0,0,0,.45),0 10px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--ui);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;letter-spacing:-.006em}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}html{scroll-behavior:auto}}
+:focus-visible{outline:2px solid var(--magenta);outline-offset:2px;border-radius:6px}
+img{max-width:100%}
+button{font:inherit}
+
+/* ---------- review chrome ---------- */
+#reviewbar{position:sticky;top:0;z-index:60;background:#18181b;color:#fafafa;
+  display:flex;gap:var(--s2);align-items:center;padding:var(--s2) var(--s3);flex-wrap:wrap;
+  font-family:var(--data);font-size:11px;letter-spacing:.04em}
+#reviewbar b{font-weight:600;letter-spacing:.12em;text-transform:uppercase;opacity:.55;margin-right:var(--s2)}
+#reviewbar button{background:transparent;border:1px solid rgba(255,255,255,.22);color:inherit;
+  font-family:var(--data);font-size:11px;padding:0 12px;min-height:44px;cursor:pointer;border-radius:8px}
+#reviewbar button[aria-pressed="true"]{background:#fafafa;color:#18181b;border-color:#fafafa;font-weight:600}
+#reviewbar .sp{flex:1}
+#reviewbar .gap{width:var(--s3)}
+:root[data-mode="client"] #reviewbar{display:none}
+#reviewpill{position:fixed;right:12px;bottom:12px;z-index:60;background:#18181b;color:#fafafa;
+  border:0;border-radius:var(--r-full);padding:10px 14px;font-family:var(--data);font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;opacity:.3;transition:opacity .15s ease}
+#reviewpill:hover{opacity:1}
+:root[data-mode="client"] #reviewpill{display:block}
+#reviewpill[hidden]{display:none!important}
+:root[data-view="phone"] #app{max-width:390px;margin:0 auto;border-left:1px solid var(--rule);
+  border-right:1px solid var(--rule);min-height:100vh;background:var(--paper)}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:40;background:var(--surface);border-bottom:1px solid var(--rule);
+  transition:box-shadow .2s var(--ease)}
+:root[data-view="phone"] .hdr{position:static}
+:root[data-scrolled="1"] .hdr{box-shadow:var(--shadow-md)}
+.hdr-in{max-width:1240px;margin:0 auto;padding:10px var(--s4);display:flex;gap:var(--s4);align-items:center}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);flex:none;min-height:44px}
+.brand svg{width:20px;height:20px;color:#fff;flex:none;background:var(--magenta);
+  padding:7px;border-radius:10px;box-sizing:content-box}
+.brand .wordmark{font-weight:600;font-size:15px;letter-spacing:-.02em}
+.brand .wordmark small{display:block;font-size:10px;font-weight:500;letter-spacing:.02em;
+  color:var(--ink-3);margin-top:-1px;text-transform:none}
+.hdr .searchwrap{flex:1;min-width:0;max-width:560px}
+.hdr .searchbar{border:1px solid var(--rule);background:var(--paper)}
+.hdr .searchbar input{min-height:44px}
+.hdr .searchbar button{min-height:44px;background:transparent;color:var(--ink-3);border-left:0}
+.hdr .searchbar button:hover{color:var(--ink);background:var(--sunk)}
+@media (max-width:860px){.hdr .searchwrap{max-width:none}}
+.searchbar{display:flex;background:var(--surface);border:1px solid var(--rule);
+  border-radius:var(--r);overflow:hidden;transition:border-color .15s var(--ease),box-shadow .15s var(--ease)}
+.searchbar:focus-within{border-color:var(--magenta);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--magenta) 18%,transparent)}
+.searchbar input{flex:1;min-width:0;min-height:44px;border:0;background:transparent;
+  padding:0 var(--s3);font-family:var(--ui);font-size:15px;color:var(--ink)}
+.searchbar input:focus{outline:none}
+.searchbar input::placeholder{color:var(--ink-3)}
+.searchbar button{min-height:44px;min-width:44px;border:0;background:transparent;color:var(--ink-3);
+  cursor:pointer;padding:0 var(--s3);display:flex;align-items:center;justify-content:center;gap:6px}
+.searchbar button svg{width:17px;height:17px}
+.navlinks{display:flex;gap:2px;flex:none}
+.navlinks a{min-height:44px;display:inline-flex;align-items:center;padding:0 var(--s3);
+  font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;border-radius:8px;
+  transition:background .15s var(--ease),color .15s var(--ease);position:relative}
+.navlinks a:hover{background:var(--sunk);color:var(--ink)}
+.navlinks a.on{color:var(--ink);font-weight:600}
+.navlinks a.on::after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:3px;
+  border-radius:var(--r-full);background:var(--magenta)}
+@media (max-width:860px){.navlinks{display:none}}
+.mobnav{display:none;border-top:1px solid var(--rule-2);background:var(--surface)}
+@media (max-width:860px){.mobnav{display:flex}}
+:root[data-view="phone"] .mobnav{display:flex}
+.mobnav a{flex:1;min-height:48px;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;color:var(--ink-3);text-decoration:none;position:relative}
+.mobnav a.on{color:var(--ink);font-weight:600}
+.mobnav a.on::after{content:"";position:absolute;left:22%;right:22%;bottom:5px;height:3px;
+  border-radius:var(--r-full);background:var(--magenta)}
+
+/* ---------- page & layout ---------- */
+.page{max-width:1240px;margin:0 auto;padding:var(--s4)}
+:root[data-view="phone"] .page{padding:var(--s3)}
+.cols{display:grid;grid-template-columns:240px minmax(0,1fr) 172px;gap:var(--s4);align-items:start}
+@media (max-width:1100px){.cols{grid-template-columns:240px minmax(0,1fr)}.rail{display:none}}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.facets{display:none}}
+:root[data-view="phone"] .cols{grid-template-columns:minmax(0,1fr)}
+:root[data-view="phone"] .facets,:root[data-view="phone"] .rail{display:none}
+
+.sechead{display:flex;align-items:baseline;gap:var(--s3);justify-content:space-between;
+  margin:0 0 var(--s3);flex-wrap:wrap}
+.sechead h2{font-size:15px;font-weight:600;letter-spacing:-.01em;margin:0;color:var(--ink);
+  display:flex;align-items:center;gap:8px}
+.sechead h2::before{content:"";width:7px;height:7px;border-radius:var(--r-full);background:var(--magenta);flex:none}
+.sechead .ct{font-family:var(--data);font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sechead .seeall{font-size:13.5px;font-weight:500;color:var(--ink-2);text-decoration:none;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s2);margin:0 calc(var(--s2)*-1);border-radius:8px}
+.sechead .seeall:hover{color:var(--magenta)}
+
+/* ---------- stream & rows ---------- */
+.stream{border:1px solid var(--rule);background:var(--surface);border-radius:var(--r-lg);
+  overflow:hidden;box-shadow:var(--shadow)}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--s4);cursor:pointer;
+  padding:var(--s4);border-bottom:1px solid var(--rule-2);transition:background .15s var(--ease)}
+.row:last-child{border-bottom:0}
+.row:hover{background:color-mix(in srgb,var(--sunk) 55%,var(--surface))}
+.row.free{grid-template-columns:minmax(0,1fr)}
+.row.hl{background:color-mix(in srgb,var(--magenta-wash) 65%,var(--surface));
+  box-shadow:inset 3px 0 0 var(--magenta)}
+.row.hl:hover{background:var(--magenta-wash)}
+@media (max-width:640px){.row{grid-template-columns:minmax(0,1fr)}}
+:root[data-view="phone"] .row{grid-template-columns:minmax(0,1fr);padding:var(--s3)}
+.thumbs{display:flex;gap:6px;flex:none}
+@media (max-width:640px){.thumbs{margin-bottom:var(--s3);overflow-x:auto;padding-bottom:2px}}
+:root[data-view="phone"] .thumbs{margin-bottom:var(--s3);overflow-x:auto;padding-bottom:2px}
+.ph{width:64px;height:48px;border:1px solid var(--rule);border-radius:8px;display:flex;
+  align-items:center;justify-content:center;color:var(--ink-3);flex:none;overflow:hidden}
+.ph svg{width:26px;height:26px;opacity:.4}
+.ph.more{font-family:var(--data);font-size:11px;color:var(--ink-3);background:transparent;border-style:dashed}
+.rhead{display:flex;align-items:baseline;gap:var(--s2) var(--s3);flex-wrap:wrap;margin-bottom:6px}
+.rtitle{font-size:15px;font-weight:600;letter-spacing:-.012em;margin:0;line-height:1.3}
+.rtitle a{color:var(--ink);text-decoration:none;display:inline-block;padding:11px 0;margin:-11px 0;min-height:44px}
+.rtitle a:hover{color:var(--magenta)}
+.rprice{font-family:var(--data);font-size:14px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.rprice.none{color:var(--ink-3);font-weight:400;font-size:12.5px;font-family:var(--ui);font-style:italic}
+.rprice.odd{color:var(--ink-3)}
+.rphrase{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);white-space:nowrap}
+.rbody{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0 0 var(--s3);max-width:78ch}
+.rbody .more{font-size:13px;font-weight:500;color:var(--magenta);text-decoration:none;
+  white-space:nowrap;display:inline-block;min-width:44px;min-height:44px;padding:13px 10px;
+  margin:-13px -2px;text-align:center;line-height:18px;border-radius:8px}
+.rbody .more:hover{text-decoration:underline}
+.rmeta{display:flex;gap:var(--s2) var(--s3);flex-wrap:wrap;align-items:center;
+  font-size:12.5px;color:var(--ink-3);line-height:1.4}
+.rmeta .dot{color:var(--rule)}
+.rmeta b{font-weight:600;color:var(--ink-2)}
+.rmeta .loc,.rmeta .date{font-family:var(--data);font-size:11.5px}
+.ract{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+.kind{font-size:11px;font-weight:500;padding:3px 10px;border:1px solid var(--rule);
+  color:var(--ink-2);background:var(--sunk);white-space:nowrap;border-radius:var(--r-full);
+  display:inline-flex;align-items:center;gap:6px}
+.kind::before{content:"";width:6px;height:6px;border-radius:var(--r-full);background:var(--ink-3);opacity:.6}
+.kind.wanted{background:var(--caution-wash);border-color:color-mix(in srgb,var(--caution) 30%,transparent);color:var(--caution)}
+.kind.wanted::before{background:var(--caution);opacity:1}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--ui);font-size:14px;font-weight:500;line-height:1;min-height:44px;min-width:44px;
+  padding:0 var(--s4);display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:var(--r);
+  cursor:pointer;text-decoration:none;box-shadow:var(--shadow);
+  transition:background .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .06s ease}
+.btn:hover{background:var(--sunk)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:16px;height:16px;flex:none}
+.btn-pri{background:var(--magenta);border-color:var(--magenta);color:var(--on-accent);font-weight:600}
+.btn-pri:hover{background:var(--magenta-2);border-color:var(--magenta-2);color:var(--on-accent)}
+.btn-sm{padding:0 var(--s3);font-size:13.5px;color:var(--ink-2);border-color:transparent;
+  background:transparent;box-shadow:none;border-radius:8px}
+.btn-sm:hover{background:var(--sunk);color:var(--ink)}
+.btn[aria-pressed="true"]{color:var(--magenta);border-color:color-mix(in srgb,var(--magenta) 35%,transparent);
+  background:var(--magenta-wash)}
+.btn[aria-pressed="true"] svg{fill:currentColor}
+
+/* ---------- chips ---------- */
+.chips{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center}
+.chipscroll{overflow-x:auto;padding-bottom:var(--s1);-webkit-overflow-scrolling:touch}
+.chipscroll .chips{flex-wrap:nowrap}
+.chip{font-size:13.5px;font-weight:500;min-height:44px;padding:0 var(--s4);
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);border-radius:var(--r-full);cursor:pointer;white-space:nowrap;box-shadow:var(--shadow);
+  transition:background .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease),transform .06s ease}
+.chip:hover{background:var(--sunk);color:var(--ink)}
+.chip:active{transform:translateY(1px)}
+.chip[aria-pressed="true"]{background:var(--magenta);border-color:var(--magenta);color:var(--on-accent);font-weight:600}
+.chip .n{font-family:var(--data);font-size:11px;opacity:.72;font-variant-numeric:tabular-nums}
+.chip .x{font-family:var(--data);font-size:14px;line-height:1;opacity:.85}
+
+/* ---------- facets ---------- */
+.facet{border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s3);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.facet h4{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-3);margin:0;padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule-2)}
+.facet ul{list-style:none;margin:0;padding:var(--s1) 0}
+.facet label{display:flex;align-items:center;gap:var(--s3);min-height:44px;padding:0 var(--s4);
+  cursor:pointer;font-size:14px;color:var(--ink-2);transition:background .15s var(--ease)}
+.facet label:hover{background:var(--sunk);color:var(--ink)}
+.facet input[type=checkbox]{width:16px;height:16px;accent-color:var(--magenta);flex:none;cursor:pointer;border-radius:4px}
+.facet .ct{margin-left:auto;font-family:var(--data);font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.facet .pr{display:flex;gap:var(--s2);padding:var(--s3) var(--s4)}
+.facet .pr input{min-height:44px;width:100%;min-width:0;border:1px solid var(--rule);background:var(--paper);
+  padding:0 var(--s3);font-family:var(--data);font-size:13.5px;color:var(--ink);border-radius:8px}
+.facet .pr input:focus{outline:none;border-color:var(--magenta);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--magenta) 15%,transparent)}
+
+/* ---------- featured ---------- */
+.featband{border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.featband > h3{font-size:13px;font-weight:600;letter-spacing:.01em;text-transform:none;
+  color:var(--ink);margin:0;padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule-2);
+  display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap;align-items:baseline}
+.featband > h3::before{content:"★ ";color:var(--magenta)}
+.featband > h3 span{font-family:var(--data);font-size:10.5px;letter-spacing:0;color:var(--ink-3);font-weight:400}
+.featgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:1px;background:var(--rule-2)}
+.feat{background:var(--surface);text-decoration:none;display:flex;flex-direction:column;
+  transition:background .15s var(--ease)}
+.feat:hover{background:var(--sunk)}
+.feat .img{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--ink-3);overflow:hidden}
+.feat .img svg{width:44px;height:44px;opacity:.32;transition:opacity .15s var(--ease)}
+.feat:hover .img svg{opacity:.5}
+.feat .b{display:block;padding:var(--s3)}
+.feat .ft{display:block;font-size:13.5px;font-weight:600;color:var(--ink);margin:0 0 3px;line-height:1.3;letter-spacing:-.01em}
+.feat .fp{display:block;font-family:var(--data);font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.feat .fm{display:block;font-family:var(--data);font-size:10.5px;color:var(--ink-3);margin:var(--s2) 0 0}
+@media (max-width:640px){.featgrid{grid-template-columns:repeat(2,1fr)}}
+:root[data-view="phone"] .featgrid{grid-template-columns:repeat(2,1fr)}
+.featband.strip .featgrid{display:flex;overflow-x:auto;gap:1px;scroll-snap-type:x proximity}
+.featband.strip .feat{flex:0 0 178px;scroll-snap-align:start}
+.featband.strip .feat .img{aspect-ratio:16/10}
+.featband.strip .featgrid::after{content:"";flex:0 0 var(--s2)}
+@media (max-width:640px){
+  .featband:not(.strip) .featgrid{display:flex;overflow-x:auto;gap:1px;scroll-snap-type:x proximity}
+  .featband:not(.strip) .feat{flex:0 0 160px;scroll-snap-align:start}
+  .featband:not(.strip) .feat .img{aspect-ratio:16/10}
+  .featband:not(.strip) .feat .b{padding:var(--s2) var(--s3) var(--s3)}
+  .featband:not(.strip) .feat .fm{display:none}
+  .featband.strip > h3{padding:var(--s2) var(--s3)}
+  .featband.strip .feat{flex:0 0 128px}
+  .featband.strip .feat .img{aspect-ratio:16/9}
+  .featband.strip .feat .b{padding:var(--s2) var(--s3) var(--s3)}
+  .featband.strip .feat .ft{font-size:12.5px;line-height:1.25;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .featband.strip .feat .fp{font-size:12.5px}
+  .featband.strip .feat .fm{display:none}
+}
+:root[data-view="phone"] .featband:not(.strip) .featgrid{display:flex;overflow-x:auto;gap:1px}
+:root[data-view="phone"] .featband:not(.strip) .feat{flex:0 0 160px}
+:root[data-view="phone"] .featband:not(.strip) .feat .img{aspect-ratio:16/10}
+:root[data-view="phone"] .featband:not(.strip) .feat .fm{display:none}
+:root[data-view="phone"] .featband.strip > h3{padding:var(--s2) var(--s3)}
+:root[data-view="phone"] .featband.strip .feat{flex:0 0 128px}
+:root[data-view="phone"] .featband.strip .feat .img{aspect-ratio:16/9}
+:root[data-view="phone"] .featband.strip .feat .ft{font-size:12.5px;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+:root[data-view="phone"] .featband.strip .feat .fm{display:none}
+
+/* ---------- ad slots ---------- */
+.slot{border:1px dashed var(--rule);background:color-mix(in srgb,var(--sunk) 55%,var(--surface));
+  display:flex;align-items:center;justify-content:center;gap:var(--s2);padding:var(--s3);
+  text-align:center;flex-direction:column;border-radius:var(--r)}
+.slot .id{font-family:var(--data);font-size:10.5px;font-weight:600;letter-spacing:.12em;color:var(--ink-3)}
+.slot .sz{font-family:var(--data);font-size:9.5px;color:var(--ink-3);opacity:.72}
+.slot.top{min-height:74px;margin-bottom:var(--s4)}
+.slot.instream{min-height:76px;margin:0}
+.slot.ad{border-style:solid;border-color:var(--rule-2)}
+.slot.ad .adlbl{font-size:10px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);opacity:.6}
+.rowslot{padding:var(--s4);border-bottom:1px solid var(--rule-2);background:var(--paper)}
+:root[data-view="phone"] .rowslot{padding:var(--s3)}
+.rail .slot{min-height:104px;margin-bottom:var(--s3)}
+
+/* ---------- pagination ---------- */
+.pager{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:var(--s4)}
+.pager a,.pager span{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--data);font-size:13px;border:1px solid transparent;color:var(--ink-2);text-decoration:none;
+  padding:0 var(--s3);cursor:pointer;border-radius:var(--r);
+  transition:background .15s var(--ease),border-color .15s var(--ease)}
+.pager a:hover{background:var(--sunk);border-color:var(--rule);color:var(--ink)}
+.pager .cur{background:var(--magenta);color:var(--on-accent);border-color:var(--magenta);font-weight:600}
+.pager .lbl{font-family:var(--ui);font-size:13px;color:var(--ink-3);padding-right:var(--s3);min-width:0}
+
+/* ---------- detail ---------- */
+.crumb{display:flex;gap:var(--s2);align-items:center;flex-wrap:wrap;font-size:13px;color:var(--ink-3);margin-bottom:var(--s3)}
+.crumb a{color:var(--ink-3);text-decoration:none;display:inline-block;padding:12px 0;margin:-12px 0;border-radius:6px}
+.crumb a:hover{color:var(--ink);text-decoration:underline}
+.crumb .cur{color:var(--ink);font-weight:600}
+.crumb .sep{opacity:.5}
+.dcols{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:var(--s4);align-items:start}
+@media (max-width:960px){.dcols{grid-template-columns:minmax(0,1fr)}}
+:root[data-view="phone"] .dcols{grid-template-columns:minmax(0,1fr)}
+.gal{border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.gal .main{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:var(--ink-3);
+  border-bottom:1px solid var(--rule-2);overflow:hidden;transition:background-color .25s var(--ease)}
+.gal .main svg{width:78px;height:78px;opacity:.3}
+.galcount{font-family:var(--data);font-size:11px;color:var(--ink-3);padding:var(--s2) var(--s3) 0;
+  display:flex;justify-content:space-between;align-items:center;gap:var(--s3);margin:0}
+.gal .strip{display:flex;gap:var(--s2);padding:var(--s3);overflow-x:auto}
+.gal .strip button{width:66px;height:50px;border:1px solid var(--rule);background:var(--sunk);flex:none;
+  cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:var(--ink-3);border-radius:8px}
+.gal .strip button[aria-current="true"]{border-color:var(--magenta);border-width:2px}
+.gal .strip button svg{width:22px;height:22px;opacity:.45}
+.gal .strip button.more{font-family:var(--data);font-size:12px;color:var(--ink-3);border-style:dashed}
+.gal .nophoto{aspect-ratio:16/6;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:var(--s2);color:var(--ink-3);background:color-mix(in srgb,var(--sunk) 55%,var(--surface));
+  text-align:center;padding:var(--s4)}
+.gal .nophoto b{font-size:13px;font-weight:600;color:var(--ink-2)}
+.gal .nophoto span{font-size:13px;max-width:44ch}
+.gal .nophoto svg{width:22px;height:22px}
+.dtitle{font-size:clamp(21px,3.4vw,28px);font-weight:700;letter-spacing:-.025em;line-height:1.15;
+  margin:0 0 var(--s2);text-wrap:balance}
+.dprice{font-family:var(--data);font-size:clamp(19px,2.8vw,24px);font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.dprice.none{font-family:var(--ui);font-size:16px;font-style:italic;color:var(--ink-3);font-weight:400}
+.dhead{display:flex;align-items:baseline;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s4)}
+
+/* ---------- panels ---------- */
+.panel{border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.panel > h3{font-size:13.5px;font-weight:600;color:var(--ink);margin:0;
+  padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule-2)}
+.panel .pb{padding:var(--s4)}
+.dbody{font-size:15px;line-height:1.65;color:var(--ink-2);margin:0;max-width:72ch}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;background:var(--rule-2)}
+.specs > div{background:var(--surface);padding:var(--s3) var(--s4)}
+.specs dt{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:600;margin:0 0 var(--s1)}
+.specs dd{margin:0;font-family:var(--data);font-size:14px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.specs dd.na{font-family:var(--ui);font-size:12.5px;font-style:italic;color:var(--ink-3);font-weight:400}
+.specnote{padding:var(--s3) var(--s4);border-top:1px solid var(--rule-2);font-size:13px;color:var(--ink-3);
+  display:flex;gap:var(--s2);align-items:flex-start;margin:0;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.specnote svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--caution)}
+.trust ul{list-style:none;margin:0;padding:var(--s3) var(--s4);display:grid;gap:var(--s3)}
+.trust li{display:flex;gap:var(--s3);align-items:flex-start;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.trust li svg{width:16px;height:16px;flex:none;margin-top:2px}
+.trust li.pos svg{color:var(--ok)}
+.trust li.neu svg{color:var(--ink-3)}
+.trust li b{color:var(--ink);font-weight:600}
+.safety{border-top:1px solid var(--rule-2);padding:var(--s3) var(--s4);display:flex;gap:var(--s2);
+  align-items:flex-start;font-size:12.5px;color:var(--ink-3);background:var(--blue-wash);margin:0;line-height:1.5}
+.safety svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--blue)}
+.safety a{color:var(--blue);font-weight:600;display:inline-block;padding:14px 2px;margin:-14px 0}
+.contact{display:grid;gap:var(--s2);padding:var(--s4)}
+.contact .btn{width:100%}
+.selname{font-size:15px;font-weight:600;color:var(--ink);margin:0 0 2px}
+.selrole{font-size:13px;color:var(--ink-3);margin:0 0 var(--s3)}
+.selrole .loc{font-family:var(--data);font-size:11.5px}
+
+/* ---------- sticky bars ---------- */
+.stickybar{position:sticky;bottom:0;z-index:35;border-top:1px solid var(--rule);background:var(--surface);
+  padding:var(--s3);display:flex;gap:var(--s2);box-shadow:0 -8px 24px -14px rgba(0,0,0,.35)}
+.stickybar .btn{flex:1}
+.stickybar .btn.icon{flex:0 0 52px;padding:0}
+@media (min-width:961px){.stickybar{display:none}}
+:root[data-view="phone"] .stickybar{display:flex}
+.postbar{justify-content:space-between;align-items:center}
+.postbar .postsum{display:flex;flex-direction:column;line-height:1.15;padding:0 var(--s2);flex:none}
+.postbar .postsum b{font-family:var(--data);font-size:17px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.postbar .postsum small{font-size:11px;color:var(--ink-3)}
+
+/* ---------- home ---------- */
+.hero.compact{border:1px solid var(--rule);background:var(--surface);border-radius:var(--r-lg);
+  padding:var(--s4);margin-bottom:var(--s4);box-shadow:var(--shadow)}
+.hero.compact h1{font-size:clamp(17px,2.2vw,21px);font-weight:600;letter-spacing:-.018em;
+  margin:0 0 var(--s3);line-height:1.3;text-wrap:balance;max-width:52ch;color:var(--ink)}
+.hero .searchbar.big{max-width:none;border-color:var(--rule)}
+.hero .searchbar.big input{min-height:52px;font-size:16px}
+.hero .searchbar.big button{min-height:52px;background:var(--magenta);color:var(--on-accent);
+  border-left:0;font-weight:600;font-size:14.5px;gap:8px;padding:0 var(--s5);border-radius:0}
+.hero .searchbar.big button:hover{background:var(--magenta-2);color:var(--on-accent)}
+.hero .searchbar.big button svg{width:17px;height:17px}
+@media (max-width:520px){.hero .searchbar.big button span{display:none}
+  .hero .searchbar.big button{padding:0 var(--s4)}}
+:root[data-view="phone"] .hero .searchbar.big button span{display:none}
+:root[data-view="phone"] .hero .searchbar.big button{padding:0 var(--s4)}
+.searchhint{margin:var(--s2) 0 0;font-size:12.5px;color:var(--ink-3);line-height:1.9;
+  white-space:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.searchhint button{background:none;border:0;padding:0 8px;min-height:44px;font-family:var(--data);
+  font-size:12px;color:var(--ink-2);cursor:pointer;vertical-align:middle;border-radius:6px}
+.searchhint button:hover{color:var(--magenta);background:var(--sunk)}
+.hero .quick{margin-top:var(--s3);flex-wrap:nowrap}
+.hero .quick a{font-size:13px;font-weight:500;color:var(--ink-2);text-decoration:none;
+  border:1px solid var(--rule);padding:0 var(--s4);min-height:44px;display:inline-flex;align-items:center;
+  border-radius:var(--r-full);background:var(--surface);white-space:nowrap;box-shadow:var(--shadow);
+  transition:background .15s var(--ease),color .15s var(--ease)}
+.hero .quick a:hover{background:var(--sunk);color:var(--ink)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:var(--s2);margin-bottom:var(--s4)}
+.catgrid a{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);
+  padding:var(--s3) var(--s4);text-decoration:none;min-height:52px;display:flex;align-items:center;
+  box-shadow:var(--shadow);transition:background .15s var(--ease),border-color .15s var(--ease)}
+.catgrid a:hover{background:var(--sunk)}
+.catgrid b{font-size:13.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.eflyer{border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow)}
+.eflyer h3{font-size:13px;font-weight:600;color:var(--ink);margin:0;padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--rule-2);display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
+.eflyer .eb{padding:var(--s4);display:grid;gap:var(--s3)}
+.eflyer .issue{font-family:var(--data);font-size:11px;color:var(--magenta);font-weight:600;letter-spacing:.05em}
+.eflyer ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.eflyer ul li{font-size:14px;color:var(--ink-2);padding-left:var(--s4);position:relative;line-height:1.45}
+.eflyer ul li::before{content:"";position:absolute;left:0;top:.58em;width:6px;height:6px;
+  border-radius:var(--r-full);background:var(--magenta);opacity:.6}
+
+/* ---------- sheets ---------- */
+.sheet{position:fixed;inset:0;z-index:50;visibility:hidden;pointer-events:none}
+.sheet.open{visibility:visible;pointer-events:auto}
+.sheet .scrim{position:absolute;inset:0;background:rgba(9,9,11,.55);opacity:0;transition:opacity .2s var(--ease)}
+.sheet.open .scrim{opacity:1}
+.sheet .body{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow-y:auto;
+  background:var(--paper);border-top:1px solid var(--rule);border-radius:18px 18px 0 0;
+  transform:translateY(28px);opacity:0;transition:transform .22s var(--ease),opacity .18s var(--ease)}
+.sheet.open .body{transform:translateY(0);opacity:1}
+@media (min-width:721px){
+  .sheet.center .body{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-46%);
+    max-width:420px;width:calc(100% - 48px);border:1px solid var(--rule);border-radius:var(--r-lg);
+    box-shadow:var(--shadow-md)}
+  .sheet.center.open .body{transform:translate(-50%,-50%)}
+}
+.sheet .sh{position:sticky;top:0;background:var(--paper);display:flex;justify-content:space-between;
+  align-items:center;padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule);gap:var(--s3);z-index:1}
+.sheet .sh b{font-size:14px;font-weight:600;color:var(--ink)}
+.sheet .sb{padding:var(--s3) var(--s4)}
+.sheet .sf{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--rule);
+  padding:var(--s3) var(--s4);display:flex;gap:var(--s2)}
+.sheet .sf .btn{flex:1}
+.filterbtn{display:none}
+@media (max-width:860px){.filterbtn{display:inline-flex}}
+:root[data-view="phone"] .filterbtn{display:inline-flex}
+.sortbtn{display:none}
+.sortchips{display:contents}
+@media (max-width:860px){.sortbtn{display:inline-flex}.sortchips{display:none}}
+:root[data-view="phone"] .sortbtn{display:inline-flex}
+:root[data-view="phone"] .sortchips{display:none}
+
+/* ---------- contact panel ---------- */
+.contactlist{display:grid;gap:var(--s2);padding:var(--s4)}
+.contactlist .btn{width:100%;justify-content:flex-start;gap:var(--s3)}
+.contactlist .num{font-family:var(--data);font-variant-numeric:tabular-nums}
+.contactwho{padding:var(--s4) var(--s4) 0}
+.contactwho b{display:block;font-size:15px;font-weight:600;color:var(--ink)}
+.contactwho span{display:block;font-size:13px;color:var(--ink-3);margin-top:2px}
+.contactwho .loc{font-family:var(--data);font-size:12px}
+.nophone{padding:0 var(--s4) var(--s4);font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- callouts ---------- */
+.savesearch{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap;margin:0 0 var(--s3);
+  padding:var(--s3) var(--s4);border:1px solid var(--rule);background:var(--surface);
+  font-size:13px;line-height:1.45;color:var(--ink-2);border-radius:var(--r);box-shadow:var(--shadow)}
+.savesearch svg{width:16px;height:16px;flex:none;color:var(--ink-3)}
+.savesearch > span{flex:1;min-width:180px}
+.savesearch b{color:var(--ink);display:block}
+.savesearch.done{border-color:color-mix(in srgb,var(--ok) 40%,transparent);background:var(--ok-wash)}
+.savesearch.done svg{color:var(--ok)}
+.ownerq{display:flex;gap:var(--s3);align-items:flex-start;margin:0 0 var(--s3);padding:var(--s3) var(--s4);
+  border:1px solid color-mix(in srgb,var(--caution) 30%,transparent);background:var(--caution-wash);
+  font-size:13px;line-height:1.5;color:var(--ink-2);border-radius:var(--r)}
+.ownerq svg{width:15px;height:15px;flex:none;margin-top:2px;color:var(--caution)}
+.ownerq b{color:var(--ink)}
+.empty{padding:var(--s7) var(--s4);text-align:center;color:var(--ink-3);font-size:14px}
+.empty b{display:block;font-size:15px;color:var(--ink);margin-bottom:var(--s2);font-weight:600}
+.foot{border-top:1px solid var(--rule);margin-top:var(--s6);padding:var(--s5) var(--s4);
+  font-size:12.5px;color:var(--ink-3);max-width:1240px;margin-left:auto;margin-right:auto;line-height:1.55}
+.foot p{margin:0 0 var(--s2);max-width:74ch}
+.foot .note{font-family:var(--data);font-size:10.5px;letter-spacing:.03em;opacity:.85}
+
+/* ---------- forms ---------- */
+.field{display:block;margin-bottom:var(--s4)}
+.field > label,.fieldlbl{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.field input[type=text],.field input[type=number],.field input[type=search],
+.field input[type=email],.field select,.field textarea{
+  width:100%;min-height:44px;border:1px solid var(--rule);background:var(--surface);border-radius:var(--r);
+  padding:0 var(--s3);font-family:var(--ui);font-size:15px;color:var(--ink);box-shadow:var(--shadow)}
+.field textarea{padding:var(--s3);min-height:120px;line-height:1.55;resize:vertical}
+.field select{appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 19px,calc(100% - 13px) 19px;background-size:5px 5px,5px 5px;
+  background-repeat:no-repeat;padding-right:var(--s6)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--magenta);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--magenta) 15%,transparent)}
+.field .hint{font-size:12.5px;color:var(--ink-3);margin:6px 0 0;line-height:1.5}
+.fieldrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--s3)}
+.counter{display:flex;justify-content:space-between;align-items:center;margin-top:6px;
+  font-family:var(--data);font-size:11.5px;color:var(--ink-3);gap:var(--s3);flex-wrap:wrap}
+.counter .over{color:var(--warn);font-weight:600}
+.counter .cap{color:var(--ink-3)}
+
+.tierpick{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-bottom:var(--s2)}
+@media (max-width:520px){.tierpick{grid-template-columns:1fr}}
+:root[data-view="phone"] .tierpick{grid-template-columns:1fr}
+.tierpick button{text-align:left;border:1px solid var(--rule);background:var(--surface);border-radius:var(--r-lg);
+  padding:var(--s3) var(--s4);cursor:pointer;min-height:44px;box-shadow:var(--shadow);
+  transition:border-color .15s var(--ease),background .15s var(--ease)}
+.tierpick button:hover{background:var(--sunk)}
+.tierpick button[aria-pressed="true"]{border-color:var(--magenta);
+  box-shadow:0 0 0 1px var(--magenta),var(--shadow);background:var(--magenta-wash)}
+.tierpick b{display:block;font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.tierpick span{display:block;font-size:13px;color:var(--ink-3);line-height:1.45}
+.tierpick .pz{font-family:var(--data);font-size:15px;font-weight:600;color:var(--ink);float:right}
+
+.catpick{display:flex;flex-wrap:wrap;gap:var(--s2);max-height:196px;overflow-y:auto;
+  border:1px solid var(--rule);background:var(--paper);padding:var(--s3);border-radius:var(--r)}
+.catopt{min-height:44px;padding:0 var(--s3);border:1px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);font-size:13px;font-weight:500;border-radius:var(--r-full);cursor:pointer;
+  transition:border-color .15s var(--ease),color .15s var(--ease),background .15s var(--ease),transform .06s ease}
+.catopt:hover:not(:disabled){background:var(--sunk);color:var(--ink)}
+.catopt:active:not(:disabled){transform:translateY(1px)}
+.catopt[aria-pressed="true"]{background:var(--magenta);border-color:var(--magenta);color:var(--on-accent);font-weight:600}
+.catopt:disabled{opacity:.42;cursor:not-allowed}
+
+.ups{border:1px solid var(--rule);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.ups label{display:flex;align-items:flex-start;gap:var(--s3);padding:var(--s3) var(--s4);
+  border-bottom:1px solid var(--rule-2);cursor:pointer;min-height:56px;transition:background .15s var(--ease)}
+.ups label:last-of-type{border-bottom:0}
+.ups label:hover{background:var(--sunk)}
+.ups input{width:17px;height:17px;accent-color:var(--magenta);flex:none;margin-top:2px}
+.ups .ub{flex:1;min-width:0}
+.ups .ut{font-size:14px;font-weight:600;color:var(--ink);display:block}
+.ups .ud{font-size:12.5px;color:var(--ink-3);display:block;line-height:1.45;margin-top:2px}
+.ups .up{font-family:var(--data);font-size:14px;font-weight:600;color:var(--ink);flex:none;font-variant-numeric:tabular-nums}
+.total{display:flex;justify-content:space-between;align-items:center;padding:var(--s4);
+  border-top:1px solid var(--rule);background:var(--sunk);gap:var(--s3);flex-wrap:wrap}
+.total .tl{font-size:13px;font-weight:600;color:var(--ink-2)}
+.total .tv{font-family:var(--data);font-size:22px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* preview column */
+.postpage aside .panel{position:sticky;top:var(--s4)}
+.pvwrap{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+@media (max-width:860px){.pvwrap{grid-template-columns:1fr}}
+:root[data-view="phone"] .pvwrap{grid-template-columns:1fr}
+.pv{border:1px solid var(--rule);background:var(--surface);border-radius:var(--r);overflow:hidden}
+.pv.on{border-color:var(--magenta);box-shadow:0 0 0 1px var(--magenta)}
+.pv > h4{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin:0;padding:var(--s2) var(--s3);border-bottom:1px solid var(--rule-2);
+  display:flex;justify-content:space-between;gap:var(--s2);flex-wrap:wrap}
+.pv.on > h4{color:var(--magenta)}
+.pv .row{cursor:default;border-bottom:0}
+.pv .row:hover{background:var(--surface)}
+.pv .ract{display:none}
+.pvdh{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--magenta);margin:var(--s4) 0 var(--s2)}
+.pvdelta{list-style:none;margin:0;padding:var(--s3) var(--s4);border:1px solid var(--rule);
+  background:var(--surface);display:grid;gap:7px;border-radius:var(--r)}
+.pvdelta li{font-size:13px;color:var(--ink-2);display:flex;gap:8px;line-height:1.45}
+.pvdelta li::before{content:"+";font-family:var(--data);color:var(--magenta);font-weight:600;flex:none}
+.pvdelta b{color:var(--ink)}
+.pvnote{font-size:12px;color:var(--ink-3);line-height:1.5}
+.ghosts{display:flex;gap:6px;padding:0 var(--s3) var(--s2)}
+.ghosts .ph{border-style:dashed;background:transparent}
+
+.drop{border:1px dashed var(--rule);background:color-mix(in srgb,var(--sunk) 55%,var(--surface));
+  padding:var(--s5) var(--s4);text-align:center;border-radius:var(--r);color:var(--ink-3)}
+.drop b{display:block;font-size:14px;color:var(--ink-2);font-weight:600;margin-bottom:var(--s1)}
+.drop span{font-size:12.5px}
+.photos{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s3)}
+.photos .p{width:64px;height:50px;border:1px solid var(--rule);border-radius:8px;display:flex;
+  align-items:center;justify-content:center;color:var(--ink-3);position:relative;overflow:hidden}
+.photos .p svg{width:22px;height:22px;opacity:.4}
+
+/* ---------- tabs, tiles, manage ---------- */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--rule);margin-bottom:var(--s4);overflow-x:auto}
+.tabs a{min-height:48px;display:inline-flex;align-items:center;padding:0 var(--s4);white-space:nowrap;
+  font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:none;border-bottom:2px solid transparent;
+  transition:color .15s var(--ease)}
+.tabs a:hover{color:var(--ink)}
+.tabs a.on{color:var(--ink);font-weight:600;border-bottom-color:var(--magenta)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--s2);margin-bottom:var(--s4)}
+.tiles > div{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);
+  padding:var(--s3) var(--s4);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.tiles > div::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--magenta)}
+.tiles > div:nth-child(2)::before{background:var(--blue)}
+.tiles > div:nth-child(3)::before{background:var(--caution)}
+.tiles > div:nth-child(4)::before{background:var(--ok)}
+.tiles b{display:block;font-family:var(--data);font-size:22px;font-weight:700;color:var(--ink);
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.tiles span{display:block;font-size:12px;color:var(--ink-3);font-weight:500;margin-top:var(--s1)}
+.manage{border-top:1px solid var(--rule-2);padding:var(--s3) var(--s4);
+  background:color-mix(in srgb,var(--sunk) 50%,var(--surface));
+  display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center}
+.manage .st{font-family:var(--data);font-size:11.5px;color:var(--ink-3);margin-right:auto;line-height:1.5}
+.manage .st b{color:var(--ink);font-weight:600}
+.expiry{font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--r-full);
+  background:var(--caution-wash);color:var(--caution);white-space:nowrap;
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid color-mix(in srgb,var(--caution) 28%,transparent)}
+.expiry::before{content:"";width:6px;height:6px;border-radius:var(--r-full);background:currentColor}
+.expiry.ok{background:var(--ok-wash);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 28%,transparent)}
+
+/* ---------- seller ---------- */
+.sellerhead{border:1px solid var(--rule);background:var(--surface);padding:var(--s4);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);box-shadow:var(--shadow)}
+.sellerhead h1{font-size:clamp(20px,3vw,26px);font-weight:700;letter-spacing:-.022em;
+  margin:0 0 var(--s1);line-height:1.18}
+.sellerhead .sub{font-size:13.5px;color:var(--ink-3);margin:0 0 var(--s3);display:flex;
+  gap:var(--s2);align-items:center;flex-wrap:wrap}
+.sellerhead .sub .loc{font-family:var(--data);font-size:12.5px}
+.sellerhead .safety{border:1px solid var(--rule-2);border-radius:var(--r)}
+.dealerslot{border:1px dashed var(--rule);background:color-mix(in srgb,var(--sunk) 55%,var(--surface));
+  padding:var(--s3) var(--s4);margin-top:var(--s3);font-size:12.5px;color:var(--ink-3);
+  display:flex;gap:var(--s2);align-items:flex-start;border-radius:var(--r);line-height:1.5}
+.dealerslot svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--caution)}
+
+/* ---------- cross-links ---------- */
+.mini{display:grid;gap:0}
+.mini a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:var(--s3);align-items:center;
+  padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule-2);text-decoration:none;min-height:56px;
+  transition:background .15s var(--ease)}
+.mini a:last-child{border-bottom:0}
+.mini a:hover{background:var(--sunk)}
+.mini .mimg{width:52px;height:40px;border:1px solid var(--rule);border-radius:6px;display:flex;
+  align-items:center;justify-content:center;color:var(--ink-3);flex:none;overflow:hidden}
+.mini .mimg svg{width:20px;height:20px;opacity:.4}
+.mini .mt{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.3;letter-spacing:-.01em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mini .ms{font-family:var(--data);font-size:11px;color:var(--ink-3);margin-top:2px;display:block}
+.mini .mp{font-family:var(--data);font-size:13px;font-weight:600;color:var(--ink);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.mini .mp.none{font-family:var(--ui);font-size:11.5px;font-style:italic;color:var(--ink-3);font-weight:400}
+.secondary{display:flex;gap:var(--s2);flex-wrap:wrap;padding:var(--s3) var(--s4);border-top:1px solid var(--rule-2)}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto;border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4);
+  border-radius:var(--r-lg);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:13.5px}
+th{text-align:left;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+  color:var(--ink-3);padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule);
+  background:color-mix(in srgb,var(--sunk) 55%,var(--surface));white-space:nowrap}
+td{padding:var(--s3) var(--s4);border-bottom:1px solid var(--rule-2);color:var(--ink-2);
+  vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:0}
+td:first-child{color:var(--ink);font-weight:500}
+td .m,th .m{font-family:var(--data);font-variant-numeric:tabular-nums;font-size:12.5px}
+
+/* ---------- motion & feedback ---------- */
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+main.page.enter{animation:pageIn .22s var(--ease) both}
+#toastbox{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;
+  display:grid;gap:8px;pointer-events:none;max-width:calc(100vw - 32px)}
+.toast{background:#18181b;color:#fafafa;font-size:13px;font-weight:500;
+  padding:11px 18px;border-radius:var(--r-full);box-shadow:var(--shadow-md);opacity:0;transform:translateY(8px);
+  transition:opacity .18s var(--ease),transform .18s var(--ease);text-align:center;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;border:1px solid rgba(255,255,255,.08)}
+:root[data-theme="dark"] .toast{background:#fafafa;color:#18181b;border-color:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toast{background:#fafafa;color:#18181b;border-color:transparent}}
+.toast.show{opacity:1;transform:none}
+
+</style>
+
+
+<div id="app"></div>
+<div id="contact" class="sheet center" role="dialog" aria-modal="true" aria-label="Contact advertiser"></div>
+<div id="toastbox" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — real listings observed on barnstormers.com, 24 Aug 2026.
+   Seller copy is reproduced as written, including the shouting.
+   ============================================================ */
+const D = [
+ {id:2068778,kind:"aircraft",tier:"upgraded",title:"PT6A-21 Turbine Cessna U206F",price:875000,
+  phrase:"Accepting offers",photos:20,mfg:"Cessna",model:"U206F",posted:"24 Aug 2026",cat:"Cessna",
+  body:"Converted by Turbine Conversions, Ltd. under STC SA04034CH, this U206F was built for owners who demand turbine performance and rugged mission capability from a proven utility aircraft. Turbine power PT6A-21 — 0 SNEW. Hartzell propeller — 0 SNEW. Full factory warranty on engine and propeller. 2,227.8 hours total time. Fresh annual through 2026. Built for the bush: Airglas large nose fork, ABI 1010 Bush Wheels, 6-ply tires, Stene kit, leading-edge lights, new paint.",
+  doc:"U206F_Specs.pdf",
+  specs:{year:"1976",totalTime:"2,227.8",engine:"0 SNEW",prop:"0 SNEW",annual:"Thru 2026",damage:"",basedAt:"KMGN"},
+  seller:{name:"Mark Grahek",company:"Turbine Conversions, Ltd.",role:"Owner",city:"Nunica",state:"MI",zip:"49448",
+    listings:31,active:6,site:"turbineconversions.com",domainMatch:true}},
+
+ {id:2063901,kind:"aircraft",tier:"free",title:"1966 Cessna Skyhawk 172G",price:130000,
+  phrase:"Available for sale",photos:0,mfg:"Cessna",model:"172",posted:"24 Aug 2026",cat:"Cessna",
+  body:"3450 TT 1200 SMOH new interior 2024 hangared since new annual due March call for details",
+  specs:{year:"1966",totalTime:"3,450",engine:"1,200 SMOH",annual:"Due Mar",damage:""},
+  seller:{name:"Dale Wortham",company:"",role:"Owner",city:"Ada",state:"OK",zip:"74820",
+    listings:1,active:1,site:"",domainMatch:false}},
+
+ {id:2068709,kind:"aircraft",tier:"upgraded",title:"1977 Cessna T210M",price:270000,
+  phrase:"Available for sale",photos:14,mfg:"Cessna",model:"210",posted:"24 Aug 2026",cat:"Cessna",
+  body:"Turbo 210M, 4,180 TT, 690 SMOH on factory reman TSIO-520-R. Garmin GTN 650Xi, GFC 500 autopilot, ADS-B in and out. New paint 2022, interior 8/10. Known ice equipped. No damage history, complete logs since new. Hangared in Arizona its entire life. Annual completed June 2026.",
+  specs:{year:"1977",totalTime:"4,180",engine:"690 SMOH",annual:"Jun 2026",damage:"None",avionics:"GTN 650Xi · GFC 500",basedAt:"KCHD"},
+  seller:{name:"Ray Feldman",company:"Desert Air Sales",role:"Broker",city:"Chandler",state:"AZ",zip:"85226",
+    listings:88,active:12,site:"desertairsales.com",domainMatch:true}},
+
+ {id:2063424,kind:"aircraft",tier:"free",title:"1973 Cessna 150L",price:59000,
+  phrase:"Available for sale",photos:0,mfg:"Cessna",model:"150",posted:"23 Aug 2026",cat:"Cessna",
+  body:"5100 TT 340 SMOH good paint fair interior fresh annual always hangared no damage history",
+  specs:{year:"1973",totalTime:"5,100",engine:"340 SMOH",annual:"Fresh",damage:"None"},
+  seller:{name:"Curtis Yoder",company:"",role:"Owner",city:"Goshen",state:"IN",zip:"46526",
+    listings:3,active:1,site:"",domainMatch:false}},
+
+ {id:2067412,kind:"aircraft",tier:"highlight",title:"1963 Cessna 172E (Light Sport)",price:99000,
+  phrase:"Age forces sale",photos:11,mfg:"Cessna",model:"172",posted:"23 Aug 2026",cat:"Cessna",
+  body:"Meets LSA weight limits. 2,689 TT, 221 SMOH. Garmin GTX 335 ADS-B out, new glass, recent paint. Always hangared, no damage history. Logs complete since 1963. I am 84 and can no longer pass a medical — this airplane deserves someone who will fly it.",
+  specs:{year:"1963",totalTime:"2,689",engine:"221 SMOH",annual:"Apr 2026",damage:"None",avionics:"GTX 335"},
+  seller:{name:"Harold Prentice",company:"",role:"Owner",city:"Sebring",state:"FL",zip:"33875",
+    listings:2,active:1,site:"",domainMatch:false}},
+
+ {id:2068320,kind:"aircraft",tier:"upgraded",title:"2010 Amphibious AirCam",price:245000,
+  phrase:"Check it out",photos:17,mfg:"Lockwood",model:"AirCam",posted:"24 Aug 2026",cat:"Experimental",
+  body:"413tt, 2100gw, standard AirCam rear panel, analog front panel, Clamar 2180 all electric amphibs purchased 2017, all s/b's up to date, custom 6 pole holder and removable rear basket, NDH, professional build by Lance, always hangered, fresh water only, HD AirCam W strut system",
+  specs:{year:"2010",totalTime:"413",engine:"Twin Rotax 912",damage:"NDH",annual:""},
+  seller:{name:"Robert Meyer",company:"",role:"Broker",city:"Sebring",state:"FL",zip:"33875",
+    listings:19,active:4,site:"",domainMatch:false}},
+
+ {id:2066140,kind:"aircraft",tier:"upgraded",title:"Aviat Husky A1",price:129900,
+  phrase:"For sale or trade",photos:9,mfg:"Aviat",model:"Husky",posted:"24 Aug 2026",cat:"Aviat Aircraft",
+  body:"A1 with 998 TT and updated electronics have larger bush tires. Was on floats at one point so could be rigged that way again easily. Upgraded avionics with new G5 GTR 200 Radio and GNX 375 Fresh annual",
+  specs:{year:"1998",totalTime:"998",engine:"",annual:"Fresh",damage:"",avionics:"G5 · GTR 200 · GNX 375"},
+  seller:{name:"Chad Branson",company:"Skye Equipment",role:"Owner",city:"Asheboro",state:"NC",zip:"27205",
+    listings:24,active:7,site:"skyeequipment.com",domainMatch:true}},
+
+ {id:2067788,kind:"aircraft",tier:"upgraded",title:"Van's RV-6",price:135000,
+  phrase:"Available for immediate sale",photos:12,mfg:"Van's RV",model:"RV-6",posted:"24 Aug 2026",cat:"Van's RV",
+  body:"Beautiful 2003 Vans RV-6 for sale by owner. AFTT 1350 Engine O-360 180HP TSMO 150 overhauled Nov/2025 all compression 79/80. CS Prop 10 hrs since reseal/Iran July/26. Electric flaps, pitch and roll trim. Duel Dynon HDX 10in screen no IFR/VFR only autopilot. Big tail for better spin recovery and more stability in turbulence. Slide canopy with extender. New tail wheel.",
+  specs:{year:"2003",totalTime:"1,350",engine:"150 SMOH",annual:"",damage:"",avionics:"Dual Dynon HDX 10\""},
+  seller:{name:"Shawn Taylor",company:"",role:"Owner",city:"Eden",state:"UT",zip:"84310",
+    listings:1,active:1,site:"",domainMatch:false}},
+
+ {id:2062018,kind:"aircraft",tier:"free",title:"1977 Cessna 172N w/ O-320-D2J",price:149000,
+  phrase:"Available",photos:0,mfg:"Cessna",model:"172",posted:"22 Aug 2026",cat:"Cessna",
+  body:"O-320-D2J 160hp conversion 3900TT 410 SMOH IFR certified call evenings only please",
+  specs:{year:"1977",totalTime:"3,900",engine:"410 SMOH",annual:"",damage:""},
+  seller:{name:"Vern Kloss",company:"",role:"Owner",city:"Sioux Falls",state:"SD",zip:"57104",
+    listings:1,active:1,site:"",domainMatch:false}},
+
+ {id:2061955,kind:"aircraft",tier:"free",title:"1966 172G TT: 2689 SMOH: 221",price:119900,
+  phrase:"Wow!",photos:0,mfg:"Cessna",model:"172",posted:"22 Aug 2026",cat:"Cessna",
+  body:"REDUCED!! MUST SELL THIS MONTH!! GREAT LITTLE AIRPLANE FLYS PERFECT CALL ANYTIME",
+  specs:{year:"1966",totalTime:"2,689",engine:"221 SMOH",annual:"",damage:""},
+  seller:{name:"Denny Rausch",company:"",role:"Owner",city:"Warsaw",state:"MO",zip:"65355",
+    listings:6,active:4,site:"",domainMatch:false}},
+
+ {id:2059014,kind:"aircraft",tier:"upgraded",title:"1980 Cessna 172RG Cutlass",price:139900,
+  phrase:"Available for sale",photos:8,mfg:"Cessna",model:"172RG",posted:"21 Aug 2026",cat:"Cessna",
+  body:"Retractable gear 172RG. 5,880 TT, 1,140 SMOH on Lycoming O-360-F1A6. Fresh annual August 2026. Garmin 430W, KX155 #2, KAP 140 autopilot. Paint 7/10, interior 6/10, one small ding in the left wingtip disclosed in logs.",
+  specs:{year:"1980",totalTime:"5,880",engine:"1,140 SMOH",annual:"Aug 2026",damage:"Disclosed in logs",avionics:"GNS 430W · KAP 140"},
+  seller:{name:"Ray Feldman",company:"Desert Air Sales",role:"Broker",city:"Chandler",state:"AZ",zip:"85226",
+    listings:88,active:12,site:"desertairsales.com",domainMatch:true}},
+
+ {id:2058220,kind:"aircraft",tier:"free",title:"Cessna 172 project",price:30000,
+  phrase:"Project",photos:3,mfg:"Cessna",model:"172",posted:"20 Aug 2026",cat:"Projects Only",
+  body:"Disassembled 1968 172 project. Wings off, engine on stand. Logs present. Bring a trailer.",
+  specs:{year:"1968",totalTime:"",engine:"",annual:"",damage:"Project — see photos"},
+  seller:{name:"Tim Alderman",company:"",role:"Owner",city:"Pearland",state:"TX",zip:"77581",
+    listings:4,active:2,site:"",domainMatch:false}},
+
+ {id:2068754,kind:"parts",tier:"free",title:"Cessna 172 nose landing gear",price:7250,
+  phrase:"Available",photos:0,mfg:"Cessna",model:"172",posted:"24 Aug 2026",cat:"Cessna Parts",
+  body:"Complete assembly, serviceable tag, removed from N-model.",
+  specs:{condition:"Serviceable",partNumber:"",fits:"Cessna 172 N/P",removedFrom:"1978 172N",qty:"1"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068756,kind:"parts",tier:"free",title:"Garmin GMA 1347 audio panel",price:1200,
+  phrase:"Available",photos:0,mfg:"Garmin",model:"GMA 1347",posted:"24 Aug 2026",cat:"Avionics",
+  body:"Removed from Cessna Columbia 400 P/N 011-00809-00",
+  specs:{condition:"Removed, untested",partNumber:"011-00809-00",fits:"",removedFrom:"Columbia 400",qty:"1"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068757,kind:"parts",tier:"free",title:"UH-1 PN-204-040-003-37 Huey 42",price:1000,
+  phrase:"Available",photos:0,mfg:"Bell",model:"UH-1",posted:"24 Aug 2026",cat:"Helicopter Parts",
+  body:"UH-1 PN-204-040-003-37 Huey 42 Degree Gear Box sold as core",
+  specs:{condition:"Core",partNumber:"204-040-003-37",fits:"Bell UH-1",qty:"1"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068758,kind:"parts",tier:"free",title:"Semi load Falcon 10 parts",price:10000,
+  phrase:"Available",photos:0,mfg:"Dassault",model:"Falcon 10",posted:"24 Aug 2026",cat:"Parts For Sale",
+  body:"Cockpit section, rear section, flaps, landing gear, surfaces, interior, slats, hydraulics come take it all",
+  specs:{condition:"As removed",partNumber:"",fits:"Dassault Falcon 10",qty:"Lot"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068711,kind:"parts",tier:"free",title:"2010 Turbo Cirrus SR-22",price:1,
+  phrase:"Parts for sale",photos:6,mfg:"Cirrus",model:"SR22",posted:"24 Aug 2026",cat:"Salvage",
+  body:"2073 TT, Continental IO-550N Twin Turbo 637 SMOH, Garmin G1000 Perspective, GFC 700 auto pilot, Air-conditioning. LOADED! Chute pulled. Parting out",
+  specs:{condition:"Parting out",partNumber:"",fits:"Cirrus SR22 / SR22T",qty:"Various"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068715,kind:"aircraft",tier:"free",title:"1968 Cessna 150 rebuildable airframe",price:12500,
+  phrase:"Salvage",photos:0,mfg:"Cessna",model:"150",posted:"23 Aug 2026",cat:"Salvage",
+  body:"Gear-up damage, firewall straight, logs present. Engine sold separately. Trailer it home.",
+  specs:{year:"1968",totalTime:"4,910",engine:"Sold separately",annual:"",damage:"Gear-up, repairable"},
+  seller:{name:"Walter Bagdasarian",company:"Alpine Airparts",role:"Owner",city:"El Cajon",state:"CA",zip:"92020",
+    listings:412,active:96,site:"alpineairparts.com",domainMatch:true}},
+
+ {id:2068602,kind:"parts",tier:"free",title:"Handheld cockpit microphone",price:150,
+  phrase:"Available",photos:0,mfg:"",model:"",posted:"23 Aug 2026",cat:"Avionics",
+  body:"Works fine. Standard PJ plug.",
+  specs:{condition:"Used, working",partNumber:"",fits:"",qty:"1"},
+  seller:{name:"Gene Whitlow",company:"",role:"Owner",city:"Lubbock",state:"TX",zip:"79407",
+    listings:9,active:3,site:"",domainMatch:false}},
+
+ {id:2068101,kind:"parts",tier:"upgraded",title:"Comelli emergency chutes",price:2337,
+  phrase:"Great buy",photos:5,mfg:"Comelli",model:"",posted:"24 Aug 2026",cat:"Flight Gear",
+  body:"Trikes, Fixed wing, PPC, Ultralight, Experimental. 500, 600, 750, 900, 1050 lb chutes $2337 to $3581 delivered. New in bag with certification paperwork. Repack interval 6 years.",
+  specs:{condition:"New",partNumber:"",fits:"Trike · Fixed wing · PPC · UL",qty:"In stock"},
+  seller:{name:"Frank Dempsey",company:"New Mexico Trikes",role:"Owner",city:"Albuquerque",state:"NM",zip:"87119",
+    listings:36,active:11,site:"nmtrikes.com",domainMatch:true}},
+
+ {id:2065012,kind:"parts",tier:"free",title:"New Heggemann exhaust for 172",price:null,
+  phrase:"For sale",photos:0,mfg:"Cessna",model:"172",posted:"24 Aug 2026",cat:"Cessna Parts",
+  body:"Powerflow like exhaust system, New for Cessna 172. No certification.",
+  specs:{condition:"New",partNumber:"",fits:"Cessna 172",qty:"1"},
+  seller:{name:"Steve Paton",company:"Firkus Aircraft Inc",role:"Owner",city:"Chilliwack",state:"BC",zip:"V2P 1A5",
+    country:"Canada",listings:57,active:14,site:"",domainMatch:false}},
+
+ {id:2060135,kind:"engines",tier:"free",title:"Overhauled O-470-R",price:null,
+  phrase:"Available for sale",photos:0,mfg:"Continental",model:"O-470-R",posted:"24 Aug 2026",cat:"Engines - Piston",
+  body:"O 470 R SN 275543-R engine available bottom end has been overhauled by ATC, available with new cylinders, OH'd cylinders or save money and have your cylinders OH'd. New cam and lifters, starter adapter OH'd, carb OH'd, new mags & harness, new plugs. Can be purchased outright or exchange, pricing will depend on your requirements.",
+  specs:{smoh:"0 since OH",tbo:"1,500",logs:"Yes",terms:"Outright or exchange",serial:"275543-R"},
+  seller:{name:"Keith Rondeau",company:"Brant Aero",role:"Owner",city:"Burlington",state:"ON",zip:"L7L 5T7",
+    country:"Canada",listings:143,active:22,site:"brantaero.com",domainMatch:true}},
+
+ {id:2064880,kind:"engines",tier:"free",title:"Lycoming O-320-E2D core",price:4500,
+  phrase:"Available",photos:0,mfg:"Lycoming",model:"O-320-E2D",posted:"21 Aug 2026",cat:"Engines - Piston",
+  body:"Runout core, prop strike history, logs incomplete. Sold as core only, no returns.",
+  specs:{smoh:"Runout",tbo:"2,000",logs:"Incomplete",terms:"Core only",serial:""},
+  seller:{name:"Marty Ellison",company:"",role:"Owner",city:"Bowling Green",state:"KY",zip:"42101",
+    listings:12,active:5,site:"",domainMatch:false}},
+
+ {id:2068700,kind:"property",tier:"upgraded",title:"Frontier Airpark custom home",price:1777750,
+  phrase:"Available for sale",photos:18,mfg:"",model:"",posted:"24 Aug 2026",cat:"Airport Property",
+  body:"Private VFR, 3800 ft runway. Located in the gated Frontier Airpark neighborhood, this custom-built PNW home was designed to blend industrial styling like exposed beam hardware & concrete floors with natural finishes. Recent exterior paint, a newer roof, and professional landscaping create a welcoming setting, and is located a short distance to the runway (apx 1 block). The property offers surveyed space for a future hangar (60X40, possibly larger), allowing you to design a hangar to your specifications.",
+  specs:{runway:"3,800 ft",surface:"Paved",hangar:"Surveyed 60×40 site",acreage:"1.2",airpark:"Frontier Airpark",ident:"WN53"},
+  seller:{name:"Ericka Hardwick",company:"Pacific Crest Realty",role:"Broker",city:"Snohomish",state:"WA",zip:"98290",
+    listings:14,active:3,site:"pacificcrestrealty.com",domainMatch:true}},
+
+ {id:2068180,kind:"property",tier:"free",title:"North CA. rent large hangar",price:1450,
+  phrase:"For rent",photos:0,mfg:"",model:"",posted:"23 Aug 2026",cat:"Airport Property",
+  body:"60x50 hangar with bifold door available monthly. Power and water. Call for terms.",
+  specs:{runway:"4,600 ft",surface:"Paved",hangar:"60×50 bifold",ident:"KRDD"},
+  seller:{name:"Lyle Barrett",company:"",role:"Owner",city:"Redding",state:"CA",zip:"96002",
+    listings:2,active:2,site:"",domainMatch:false}},
+
+ {id:2068773,kind:"wanted",tier:"free",title:"M-18 Dromader",price:null,
+  phrase:"Wanted",photos:0,mfg:"PZL",model:"M-18",posted:"24 Aug 2026",cat:"Wanted",
+  body:"Looking to buy an aircraft M 18 DROMADER",
+  specs:{},
+  seller:{name:"Wojciech Kita",company:"",role:"",city:"Szczecin",state:"70",zip:"",country:"Poland",
+    listings:1,active:1,site:"",domainMatch:false}},
+
+ {id:2067001,kind:"wanted",tier:"free",title:"Wanted: Continental O-200 cylinders",price:null,
+  phrase:"Wanted",photos:0,mfg:"Continental",model:"O-200",posted:"22 Aug 2026",cat:"Parts Wanted",
+  body:"Need 2 serviceable O-200 cylinders with 8130. Will pay shipping.",
+  specs:{},
+  seller:{name:"Andy Feltz",company:"",role:"",city:"Wichita",state:"KS",zip:"67209",
+    listings:5,active:2,site:"",domainMatch:false}},
+
+ {id:2068762,kind:"services",tier:"free",title:"Prebuys nationwide",price:null,
+  phrase:"Available",photos:0,mfg:"",model:"",posted:"24 Aug 2026",cat:"Services",
+  body:"A&P/IA prebuy inspections nationwide. 30 years experience. References available.",
+  specs:{},
+  seller:{name:"Dan Kirkpatrick",company:"Kirkpatrick Aviation",role:"Owner",city:"Springfield",state:"MO",zip:"65802",
+    listings:8,active:1,site:"",domainMatch:false}},
+
+ {id:2068055,kind:"services",tier:"free",title:"Ferry pilot",price:null,
+  phrase:"Available",photos:0,mfg:"",model:"",posted:"23 Aug 2026",cat:"Services",
+  body:"ATP, 12000TT, ferry anything single or light twin CONUS and Caribbean. Insured.",
+  specs:{},
+  seller:{name:"Rick Mendez",company:"",role:"",city:"Fort Pierce",state:"FL",zip:"34946",
+    listings:3,active:1,site:"",domainMatch:false}},
+
+ {id:2066500,kind:"aircraft",tier:"free",title:"R U LOOKING FOR A P SKYMASTER",price:300000,
+  phrase:"Wow!",photos:0,mfg:"Cessna",model:"337",posted:"24 Aug 2026",cat:"Cessna",
+  body:"$800K VALUE P337 FOR $300,000 CALL ME TODAY ! ! ! WONT LAST",
+  dupe:true,
+  specs:{year:"",totalTime:"",engine:"",annual:"",damage:""},
+  seller:{name:"Ron Vecchio",company:"",role:"Owner",city:"Naples",state:"FL",zip:"34104",
+    listings:11,active:5,site:"",domainMatch:false}}
+];
+
+const FEATURED = [
+  {id:2068320,t:"2010 Amphibious AirCam",p:245000,l:"Sebring, FL",k:"aircraft"},
+  {id:2068700,t:"Frontier Airpark home",p:1777750,l:"Snohomish, WA",k:"property"},
+  {id:2068778,t:"PT6A-21 Turbine U206F",p:875000,l:"Nunica, MI",k:"aircraft"},
+  {id:2066140,t:"Aviat Husky A1",p:129900,l:"Asheboro, NC",k:"aircraft"},
+  {id:2068709,t:"1977 Cessna T210M",p:270000,l:"Chandler, AZ",k:"aircraft"},
+  {id:2067788,t:"Van's RV-6",p:135000,l:"Eden, UT",k:"aircraft"}
+];
+
+const KINDS = [
+  {k:"aircraft", label:"Aircraft"},
+  {k:"parts",    label:"Parts & avionics"},
+  {k:"engines",  label:"Engines & props"},
+  {k:"property", label:"Property & hangars"},
+  {k:"services", label:"Services"},
+  {k:"wanted",   label:"Wanted"}
+];
+
+/* ============================================================
+   CATEGORY-AWARE SPEC SCHEMAS
+   `always`  — shown even when empty; the absence is information
+   `ifPresent` — shown only when the seller supplied it
+   Anything not listed for a kind is never rendered for that kind.
+   ============================================================ */
+const SPEC_SCHEMA = {
+  aircraft:{
+    always:[["totalTime","Total time"],["engine","Engine"],["annual","Annual"],["damage","Damage history"]],
+    ifPresent:[["year","Year"],["prop","Propeller"],["avionics","Avionics"],["basedAt","Based at"]],
+    note:"Blank fields are shown because a buyer needs to know the seller did not state them."
+  },
+  parts:{
+    always:[["condition","Condition"]],
+    ifPresent:[["partNumber","Part number"],["fits","Fits"],["removedFrom","Removed from"],["qty","Quantity"]],
+    note:""
+  },
+  engines:{
+    always:[["smoh","Since overhaul"],["logs","Logs"]],
+    ifPresent:[["tbo","TBO"],["terms","Terms"],["serial","Serial"]],
+    note:""
+  },
+  property:{
+    always:[["runway","Runway"],["surface","Surface"]],
+    ifPresent:[["hangar","Hangar"],["acreage","Acreage"],["airpark","Airpark"],["ident","Identifier"]],
+    note:""
+  },
+  services:{always:[],ifPresent:[],note:""},
+  wanted:{always:[],ifPresent:[],note:""}
+};
+
+/* ---------- icons ---------- */
+const IC = {
+  plane:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 2c.7 0 1.2.6 1.2 1.3v5.4l7.6 4.3v1.9l-7.6-2.4v4.6l2.4 1.6v1.5L12 19.3l-3.6.9v-1.5l2.4-1.6v-4.6L3.2 14.9V13l7.6-4.3V3.3C10.8 2.6 11.3 2 12 2z"/></svg>',
+  hangar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 20V11c0-2.8 4-5 9-5s9 2.2 9 5v9M3 20h18M8 20v-5h8v5"/></svg>',
+  cog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.4M12 18.6V21M3 12h2.4M18.6 12H21M5.6 5.6l1.7 1.7M16.7 16.7l1.7 1.7M18.4 5.6l-1.7 1.7M7.3 16.7l-1.7 1.7"/></svg>',
+  box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 3l8 4v10l-8 4-8-4V7z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M15.5 3a5 5 0 00-4.4 7.4L3 18.5 5.5 21l8.1-8.1A5 5 0 1015.5 3z"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>',
+  bookmark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-4.6-7-10a7 7 0 1114 0c0 5.4-7 10-7 10z"/><circle cx="12" cy="11" r="2.4"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.6v.6"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M12 4l9 15H3z"/><path d="M12 10v4M12 16.6v.6"/></svg>',
+  mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1.6"/><path d="M3.4 6.4L12 12.6l8.6-6.2"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M14 3H7a1.6 1.6 0 00-1.6 1.6v14.8A1.6 1.6 0 007 21h10a1.6 1.6 0 001.6-1.6V7.6z"/><path d="M14 3v4.6h4.6"/></svg>',
+  phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M7.2 3.6h3.1l1.5 3.9-2 1.3a11.4 11.4 0 005.4 5.4l1.3-2 3.9 1.5v3.1a1.8 1.8 0 01-2 1.8A16.4 16.4 0 015.4 5.6a1.8 1.8 0 011.8-2z"/></svg>',
+  sort:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 7h13M4 12h9M4 17h5M17 10v9M17 19l3-3M17 19l-3-3"/></svg>'
+};
+const kindIcon = k => k==="property" ? IC.hangar : k==="engines" ? IC.cog : k==="parts" ? IC.box : k==="services" ? IC.wrench : IC.plane;
+
+/* Photo placeholder tone. Deterministic per listing so the stream looks varied rather than
+   repeated, and expressed as a color-mix against theme tokens so it follows light/dark. */
+function tone(id,i){ const h=(id*37+i*61)%12; return `color-mix(in srgb, var(--ink) ${4+h}%, var(--sunk))`; }
+function phBox(l,i,cls){
+  return `<span class="${cls||'ph'}" style="background:${tone(l.id,i)}">${kindIcon(l.kind)}</span>`;
+}
+
+/* ---------- helpers ---------- */
+const money = n => n==null ? null : "$"+n.toLocaleString("en-US");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const kindLabel = k => (KINDS.find(x=>x.k===k)||{}).label || k;
+const loc = s => s.city + (s.state?", "+s.state:"") + (s.country?" "+s.country:"");
+const saved = new Set();
+const renewed = new Set();   /* renewing re-dates an ad and returns it to the top */
+const sold = new Set();
+
+/* Browse rows clip long copy so a page of listings stays scannable. Free ads are capped at
+   100 characters by the product itself, so only paid ads are ever clipped — which keeps the
+   paid tier visibly longer than the free tier while removing the wall of text. Full seller
+   copy appears on the listing detail page. */
+/* Sellers are identified by a slug so advertiser pages get a real, indexable URL
+   instead of ?userid=. The listing data already carries everything the page needs. */
+/* Registration collects up to three telephone numbers and a "show my number" opt-in.
+   Some advertisers publish a number, some only take email — the contact action has to
+   reflect that rather than assuming email every time. 555 numbers are placeholders. */
+D.forEach(function(l,i){
+  const s=l.seller;
+  s.showPhone = !!s.company || i%3===0;
+  s.phone = s.showPhone ? "(555) 0"+((12+i)%90+10)+"-"+(1000+(i*137)%8999) : null;
+});
+
+/* Who the buyer is actually writing to. A wanted ad is a buyer; a brokered aircraft is
+   a broker; a ferry-pilot ad is an advertiser offering a service. */
+function contactRole(l){
+  if(l.kind==="wanted") return "buyer";
+  const r=(l.seller.role||"").toLowerCase();
+  if(r.indexOf("broker")>-1) return "broker";
+  if(r.indexOf("dealer")>-1) return "dealer";
+  if(l.kind==="services") return "advertiser";
+  return "seller";
+}
+const contactLabel = l => "Contact " + contactRole(l);
+
+const slug = s => (s.company||s.name).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+function sellerOf(id){ const l=D.find(x=>slug(x.seller)===id); return l?l.seller:null; }
+function adsBySeller(id){ return D.filter(x=>slug(x.seller)===id); }
+
+const BROWSE_CLIP = 210;
+function clip(s){
+  if(s.length <= BROWSE_CLIP) return {t:esc(s), cut:false};
+  let c = s.slice(0, BROWSE_CLIP);
+  c = c.slice(0, Math.max(c.lastIndexOf(" "), BROWSE_CLIP - 24));
+  return {t:esc(c.replace(/[,;:.\s]+$/,"")) + "…", cut:true};
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let F = { q:"", kinds:new Set(), mfgs:new Set(), min:null, max:null, photos:false,
+          model:"", pn:"", state:"", sort:"newest" };
+let sheetOpen = false, sortOpen = false;
+let navAnim = false;   /* animate the page only on navigation, never on filter re-renders */
+let galIdx = 0;        /* current gallery photograph on a detail page */
+let MODE = "client";
+
+function matches(l){
+  if(F.kinds.size && !F.kinds.has(l.kind)) return false;
+  if(F.mfgs.size && !F.mfgs.has(l.mfg)) return false;
+  if(F.photos && !l.photos) return false;
+  if(F.model && !(l.model||"").toLowerCase().includes(F.model.toLowerCase())) return false;
+  if(F.state && l.seller.state !== F.state) return false;
+  if(F.pn){
+    const pn=(l.specs&&l.specs.partNumber||"")+" "+l.body;
+    if(!pn.toLowerCase().includes(F.pn.toLowerCase())) return false;
+  }
+  if(F.min!=null && (l.price==null || l.price < F.min)) return false;
+  if(F.max!=null && (l.price==null || l.price > F.max)) return false;
+  if(F.q){
+    const h=(l.title+" "+l.body+" "+l.mfg+" "+l.model+" "+l.cat+" "+l.seller.company+" "+loc(l.seller)).toLowerCase();
+    if(!F.q.toLowerCase().split(/\s+/).every(t=>h.includes(t))) return false;
+  }
+  return true;
+}
+function results(){
+  let r = D.filter(matches);
+  if(F.sort==="asc")  r=[...r].sort((a,b)=>(a.price==null?Infinity:a.price)-(b.price==null?Infinity:b.price));
+  if(F.sort==="desc") r=[...r].sort((a,b)=>(b.price==null?-1:b.price)-(a.price==null?-1:a.price));
+  return r;
+}
+const countFor = (key,val) => D.filter(l=>{
+  const s={...F, kinds:new Set(F.kinds), mfgs:new Set(F.mfgs)};
+  if(key==="kind") s.kinds=new Set([val]); else s.mfgs=new Set([val]);
+  const save=F; F=s; const m=matches(l); F=save; return m;
+}).length;
+
+const activeCount = () => F.kinds.size + F.mfgs.size + (F.photos?1:0) + (F.min!=null?1:0) + (F.max!=null?1:0)
+  + (F.model?1:0) + (F.pn?1:0) + (F.state?1:0);
+
+const SORTS = [["newest","Newest"],["asc","Price low to high"],["desc","Price high to low"]];
+const sortLabel = k => (SORTS.find(s=>s[0]===k)||SORTS[0])[1];
+
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
+function header(route){
+  return `
+  <header class="hdr">
+    <div class="hdr-in">
+      <a class="brand" href="#/" aria-label="Barnstormers home">
+        ${IC.plane}
+        <span class="wordmark">BARNSTORMERS<small>Aviation Marketplace</small></span>
+      </a>
+      <div class="searchwrap">
+        <form class="searchbar" onsubmit="doSearch(event)">
+          <input type="search" id="q" value="${esc(F.q)}" aria-label="Search aircraft, parts, models and part numbers"
+                 placeholder="Aircraft, parts, models, part numbers…">
+          <button type="submit" aria-label="Search">${IC.search}</button>
+        </form>
+      </div>
+      <nav class="navlinks">
+        <a href="#/" class="${route==='home'?'on':''}">Home</a>
+        <a href="#/browse" class="${route==='browse'?'on':''}">Browse</a>
+        <a href="#/search" class="${route==='search'?'on':''}">Search</a>
+        <a href="#/post" class="${route==='post'?'on':''}">Sell</a>
+        <a href="#/">eFLYER</a>
+        <a href="#/hangar" class="${route==='hangar'?'on':''}">My Hangar</a>
+      </nav>
+    </div>
+    <nav class="mobnav">
+      <a href="#/" class="${route==='home'?'on':''}">Home</a>
+      <a href="#/browse" class="${route==='browse'?'on':''}">Browse</a>
+      <a href="#/search" class="${route==='search'?'on':''}">Search</a>
+      <a href="#/post" class="${route==='post'?'on':''}">Sell</a>
+      <a href="#/hangar" class="${route==='hangar'?'on':''}">Hangar</a>
+    </nav>
+  </header>`;
+}
+
+function slot(cls){
+  return `<div class="slot ad ${cls||''}"><span class="adlbl">Advertisement</span></div>`;
+}
+
+/* Homepage renders the band as a grid so paid inventory dominates the first viewport.
+   Browse renders the same 20 slots as a horizontal strip — nothing is lost, but results
+   are not pushed 600px down the page for someone who came to look at listings. */
+function featBand(variant){
+  const note = "";
+  return `
+  <section class="featband ${variant==="strip"?"strip":""}">
+    <h3>Featured listings ${note}</h3>
+    <div class="featgrid">
+      ${FEATURED.map((f,i)=>`
+        <a class="feat" href="#/l/${f.id}">
+          <span class="img" style="background:${tone(f.id,i)}">${kindIcon(f.k)}</span>
+          <span class="b">
+            <span class="ft">${esc(f.t)}</span>
+            <span class="fp">${money(f.p)}</span>
+            <span class="fm">${esc(f.l)}</span>
+          </span>
+        </a>`).join("")}
+    </div>
+  </section>`;
+}
+
+function row(l){
+  const hasPh = l.photos>0;
+  const cls = "row " + (l.tier==="highlight"?"hl":"") + (hasPh?"":" free");
+  const thumbs = hasPh ? `<div class="thumbs">
+      ${[0,1,2].slice(0,Math.min(3,l.photos)).map(i=>phBox(l,i)).join("")}
+      ${l.photos>3?`<span class="ph more">+${l.photos-3}</span>`:""}
+    </div>` : "";
+  const price = l.price==null
+    ? `<span class="rprice none">No price listed</span>`
+    : `<span class="rprice${l.price<=1?" odd":""}">${money(l.price)}</span>`;
+  return `
+  <article class="${cls}" onclick="rowClick(event,${l.id})">
+    ${thumbs}
+    <div>
+      <div class="rhead">
+        <h3 class="rtitle"><a href="#/l/${l.id}">${esc(l.title)}</a></h3>
+        ${price}
+        <span class="rphrase">${esc(l.phrase)}</span>
+        <span class="kind ${l.kind==='wanted'?'wanted':''}">${kindLabel(l.kind)}</span>
+      </div>
+      <p class="rbody">${clip(l.body).t}${clip(l.body).cut?` <a class="more" href="#/l/${l.id}">More</a>`:""}</p>
+      <div class="rmeta">
+        ${l.seller.company?`<b>${esc(l.seller.company)}</b><span class="dot">·</span>`:""}
+        <span>${esc(l.seller.name)}${l.seller.role?", "+esc(l.seller.role):""}</span>
+        <span class="dot">·</span><span class="loc">${esc(loc(l.seller))}</span>
+        <span class="dot">·</span><span class="date">${esc(l.posted)}</span>
+      </div>
+      <div class="ract">
+        <button class="btn" type="button" onclick="openContact(${l.id})">${IC.mail}<span>${contactLabel(l)}</span></button>
+        <button class="btn btn-sm js-save" data-id="${l.id}" type="button"
+                aria-pressed="${saved.has(l.id)}" onclick="toggleSave(${l.id})">
+          ${IC.bookmark}<span data-on="Saved" data-off="Save">${saved.has(l.id)?"Saved":"Save"}</span>
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function facetPanel(){
+  return `
+    <div class="facet">
+      <h4>Listing type</h4>
+      <ul>${KINDS.map(k=>`
+        <li><label>
+          <input type="checkbox" ${F.kinds.has(k.k)?"checked":""} onchange="tog('kinds','${k.k}')">
+          ${k.label}
+        </label></li>`).join("")}
+      </ul>
+    </div>
+    <div class="facet">
+      <h4>Price</h4>
+      <div class="pr">
+        <input type="number" inputmode="numeric" placeholder="Min" aria-label="Minimum price"
+               value="${F.min??""}" onchange="setPrice('min',this.value)">
+        <input type="number" inputmode="numeric" placeholder="Max" aria-label="Maximum price"
+               value="${F.max??""}" onchange="setPrice('max',this.value)">
+      </div>
+    </div>
+    <div class="facet">
+      <h4>Manufacturer</h4>
+      <ul>${[...new Set(D.map(l=>l.mfg).filter(Boolean))].sort().map(m=>`
+        <li><label>
+          <input type="checkbox" ${F.mfgs.has(m)?"checked":""} onchange="tog('mfgs',${JSON.stringify(m)})">
+          ${esc(m)}
+        </label></li>`).join("")}
+      </ul>
+    </div>
+    <div class="facet">
+      <h4>Listing</h4>
+      <ul><li><label>
+        <input type="checkbox" ${F.photos?"checked":""} onchange="togPhotos()">
+        Has photos
+      </label></li></ul>
+    </div>`;
+}
+
+function activeChips(){
+  const c=[];
+  F.kinds.forEach(k=>c.push(`<button class="chip" aria-pressed="true" onclick="tog('kinds','${k}')">${kindLabel(k)} <span class="x">×</span></button>`));
+  F.mfgs.forEach(m=>c.push(`<button class="chip" aria-pressed="true" onclick="tog('mfgs',${JSON.stringify(m)})">${esc(m)} <span class="x">×</span></button>`));
+  if(F.min!=null||F.max!=null) c.push(`<button class="chip" aria-pressed="true" onclick="clearPrice()">${F.min!=null?money(F.min):"$0"} – ${F.max!=null?money(F.max):"any"} <span class="x">×</span></button>`);
+  if(F.photos) c.push(`<button class="chip" aria-pressed="true" onclick="togPhotos()">Has photos <span class="x">×</span></button>`);
+  return c;
+}
+
+/* ============================================================
+   VIEW — BROWSE
+   ============================================================ */
+function viewBrowse(){
+  const r = results();
+  const chips = activeChips();
+  const stream = r.length ? r.map((l,i)=>{
+    let out = row(l);
+    if(i===4)  out += `<div class="rowslot">${slot("instream")}</div>`;
+    if(i===9)  out += `<div class="rowslot">${slot("instream")}</div>`;
+    if(i===15) out += `<div class="rowslot">${slot("instream")}</div>`;
+    return out;
+  }).join("") : `<div class="empty"><b>No listings match those filters.</b>Try removing one, or clear them all.</div>`;
+
+  return `
+  ${header("browse")}
+  <main class="page">
+    ${slot("top")}
+    <div class="cols">
+      <aside class="facets">${facetPanel()}</aside>
+      <div>
+        ${featBand("strip")}
+        
+        <div class="sechead">
+          <h2>Most recent listings</h2>
+          
+        </div>
+        <div class="chipscroll" style="margin-bottom:var(--s3)">
+          <div class="chips">
+            <button class="btn filterbtn" type="button" onclick="openSheet()">
+              ${IC.list}<span>Filters${activeCount()?" ("+activeCount()+")":""}</span>
+            </button>
+            <button class="btn sortbtn" type="button" onclick="openSort()">
+              ${IC.sort}<span>Sort: ${sortLabel(F.sort)}</span>
+            </button>
+            <span class="sortchips">
+              ${SORTS.map(s=>`<button class="chip" aria-pressed="${F.sort===s[0]}" onclick="setSort('${s[0]}')">${s[1]}</button>`).join("")}
+            </span>
+            ${chips.join("")}
+            ${chips.length?`<button class="btn btn-sm" type="button" onclick="clearAll()">Clear all</button>`:""}
+          </div>
+        </div>
+        ${(activeCount()||F.q) ? `
+          <div class="savesearch">
+            ${IC.mail}
+            <span><b>Email me new listings that match this search.</b>
+              We will send them as they are posted.</span>
+            <button class="btn btn-sm" type="button" onclick="saveSearch(this)">Save this search</button>
+          </div>` : ""}
+        <div class="stream">${stream}</div>
+        <nav class="pager" aria-label="Pagination">
+          <span class="lbl">Page 1</span>
+          <span class="cur">1</span><a href="#/browse">2</a><a href="#/browse">3</a>
+          <a href="#/browse">4</a><a href="#/browse">Next ›</a>
+        </nav>
+      </div>
+      <aside class="rail">
+        ${slot()}${slot()}${slot()}
+        ${slot()}${slot()}
+      </aside>
+    </div>
+  </main>
+  ${sheet()}
+  ${sortSheet()}
+  ${footer()}`;
+}
+
+function sheet(){
+  const n = results().length;
+  return `
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Filters">
+    <div class="scrim" onclick="closeSheet()"></div>
+    <div class="body">
+      <div class="sh"><b>Filters${activeCount()?" · "+activeCount()+" active":""}</b>
+        <button class="btn btn-sm" type="button" onclick="closeSheet()">Close</button></div>
+      <div class="sb">
+        ${activeCount()?`<div class="chips" style="margin-bottom:var(--s3)">${activeChips().join("")}</div>`:""}
+        ${facetPanel()}
+      </div>
+      <div class="sf">
+        <button class="btn" type="button" onclick="clearAll()">Clear all</button>
+        <button class="btn btn-pri" type="button" onclick="closeSheet()">Show ${n} listing${n===1?"":"s"}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function sortSheet(){
+  return `
+  <div class="sheet" id="sortsheet" role="dialog" aria-modal="true" aria-label="Sort listings">
+    <div class="scrim" onclick="closeSort()"></div>
+    <div class="body">
+      <div class="sh"><b>Sort</b><button class="btn btn-sm" type="button" onclick="closeSort()">Close</button></div>
+      <div class="sb">
+        <div class="ups">
+          ${SORTS.map(s=>`
+            <label><input type="radio" name="sortopt" ${F.sort===s[0]?"checked":""}
+                     onchange="setSort('${s[0]}');closeSort()" style="accent-color:var(--magenta)">
+              <span class="ub"><span class="ut">${s[1]}</span>
+              ${s[0]==="newest"?`<span class="ud">The default across the marketplace.</span>`:""}</span>
+            </label>`).join("")}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   VIEW — DETAIL
+   ============================================================ */
+function specBlock(l){
+  const sc = SPEC_SCHEMA[l.kind];
+  if(!sc || (!sc.always.length && !sc.ifPresent.length)) return "";
+  const cells=[];
+  sc.always.forEach(([k,label])=>{
+    const v=(l.specs||{})[k];
+    cells.push(`<div><dt>${label}</dt><dd class="${v?"":"na"}">${v?esc(v):"Not stated"}</dd></div>`);
+  });
+  sc.ifPresent.forEach(([k,label])=>{
+    const v=(l.specs||{})[k];
+    if(v) cells.push(`<div><dt>${label}</dt><dd>${esc(v)}</dd></div>`);
+  });
+  if(!cells.length) return "";
+  const blanks = sc.always.filter(([k])=>!(l.specs||{})[k]).length;
+  return `
+  <section class="panel">
+    <h3>Specifications</h3>
+    <dl class="specs">${cells.join("")}</dl>
+    ${blanks && sc.note ? `<p class="specnote">${IC.alert}<span>${sc.note}</span></p>` : ""}
+  </section>`;
+}
+
+function trustPanel(l){
+  const s=l.seller, li=[];
+  if(s.domainMatch && s.site)
+    li.push(`<li class="pos">${IC.check}<span><b>Email matches ${esc(s.site)}</b> — the company website on this ad</span></li>`);
+  li.push(`<li class="neu">${IC.list}<span><b>${s.listings.toLocaleString()} listing${s.listings===1?"":"s"}</b> posted · <b>${s.active} active</b> now</span></li>`);
+  li.push(`<li class="neu">${IC.pin}<span>${s.company?"Business":"Private seller"} in <b>${esc(loc(s))}</b></span></li>`);
+  return `
+  <section class="panel trust">
+    <h3>About this advertiser</h3>
+    <ul>${li.join("")}</ul>
+    <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+  </section>`;
+}
+
+function miniList(items){
+  return `<div class="mini">${items.map(l=>`
+    <a href="#/l/${l.id}">
+      <span class="mimg" style="background:${tone(l.id,0)}">${kindIcon(l.kind)}</span>
+      <span><span class="mt">${esc(l.title)}</span>
+        <span class="ms">${esc(loc(l.seller))} · ${esc(l.posted)}</span></span>
+      <span class="mp ${l.price==null?"none":""}">${l.price==null?"No price":money(l.price)}</span>
+    </a>`).join("")}</div>`;
+}
+
+function viewDetail(id){
+  const l = D.find(x=>x.id===id);
+  if(!l) return header("browse")+`<main class="page"><div class="empty"><b>Listing not found.</b><a class="btn" href="#/browse">Back to browse</a></div></main>`;
+  const hasPh=l.photos>0;
+  const gallery = hasPh ? `
+    <div class="gal">
+      <div class="main" id="galmain" style="background:${tone(l.id,0)}">${kindIcon(l.kind)}</div>
+      <p class="galcount"><span id="galpos">Photograph 1 of ${l.photos}</span>
+        <span>${l.photos} in this advertisement</span></p>
+      <div class="strip">
+        ${Array.from({length:Math.min(l.photos,8)}).map((_,i)=>`
+          <button type="button" aria-current="${i===0}" aria-label="Photograph ${i+1} of ${l.photos}"
+            style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${kindIcon(l.kind)}</button>`).join("")}
+        ${l.photos>8?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent">+${l.photos-8}</button>`:""}
+      </div>
+    </div>` : `
+    <div class="gal">
+      <div class="nophoto">
+        ${IC.info}
+        <b>No photographs on this listing</b>
+        <span>Contact the advertiser to request photographs.</span>
+      </div>
+    </div>`;
+
+  return `
+  ${header("browse")}
+  <main class="page">
+    ${slot("top")}
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href="#/browse">All listings</a><span class="sep">›</span>
+      <a href="#/browse" onclick="setKind('${l.kind}')">${kindLabel(l.kind)}</a><span class="sep">›</span>
+      <span class="cur">${esc(l.cat)}</span>
+    </nav>
+    <div class="dcols">
+      <div>
+        ${gallery}
+        <div class="dhead">
+          <h1 class="dtitle">${esc(l.title)}</h1>
+        </div>
+        <div class="dhead" style="margin-top:calc(var(--s4) * -1)">
+          ${l.price==null?`<span class="dprice none">No price listed</span>`:`<span class="dprice">${money(l.price)}</span>`}
+          <span class="rphrase">${esc(l.phrase)}</span>
+          <span class="kind ${l.kind==='wanted'?'wanted':''}">${kindLabel(l.kind)}</span>
+        </div>
+        ${l.price===1?`<p class="specnote" style="border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4)">${IC.alert}<span>This advertiser listed a nominal price of $1. The ad text indicates the aircraft is being parted out — contact the seller for component pricing.</span></p>`:""}
+        ${l.dupe?`<p class="specnote" style="border:1px solid var(--rule);background:var(--surface);margin-bottom:var(--s4)">${IC.alert}<span>This advertiser has several near-identical active listings for the same aircraft.</span></p>`:""}
+        <section class="panel">
+          <h3>Description</h3>
+          <div class="pb"><p class="dbody">${esc(l.body)}</p></div>
+        </section>
+        ${specBlock(l)}
+        ${l.doc?`<section class="panel"><h3>Attached documents</h3><div class="pb">
+          <a class="btn" href="#/l/${l.id}">${IC.doc}<span>${esc(l.doc)}</span></a>
+          <p class="hint" style="margin-top:var(--s2)">Advertisers attach a specification or inventory sheet when the description runs past the character limit.</p>
+        </div></section>`:""}
+
+        ${(function(){
+          const more = D.filter(x=>slug(x.seller)===slug(l.seller) && x.id!==l.id).slice(0,3);
+          if(!more.length) return "";
+          return `<section class="panel">
+            <h3>More from ${esc(l.seller.company||l.seller.name)}</h3>
+            ${miniList(more)}
+            <div class="secondary"><a class="btn btn-sm" href="#/seller/${slug(l.seller)}">See all ${l.seller.active} active advertisements</a></div>
+          </section>`;
+        })()}
+
+        ${(function(){
+          const sim = D.filter(x=>x.id!==l.id && x.kind===l.kind &&
+                        (x.mfg===l.mfg || x.cat===l.cat)).slice(0,3);
+          if(!sim.length) return "";
+          return `<section class="panel"><h3>Similar listings</h3>${miniList(sim)}</section>`;
+        })()}
+
+        <section class="panel">
+          <div class="secondary" style="border-top:0">
+            <button class="btn btn-sm" type="button">${IC.mail}<span>Recommend to a friend</span></button>
+            <button class="btn btn-sm" type="button">${IC.alert}<span>Report this advertisement</span></button>
+          </div>
+          
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel">
+          <h3>Contact</h3>
+          <div class="contact">
+            <p class="selname">${esc(l.seller.company || l.seller.name)}</p>
+            <p class="selrole">${l.seller.company?esc(l.seller.name)+(l.seller.role?", "+esc(l.seller.role):"")+" · ":""}<span class="loc">${esc(loc(l.seller))}</span></p>
+            <button class="btn btn-pri" type="button" onclick="openContact(${l.id})">${IC.mail}<span>${contactLabel(l)}</span></button>
+            <button class="btn js-save" data-id="${l.id}" type="button"
+                    aria-pressed="${saved.has(l.id)}" onclick="toggleSave(${l.id})">
+              ${IC.bookmark}<span data-on="Saved to watchlist" data-off="Save to watchlist">${saved.has(l.id)?"Saved to watchlist":"Save to watchlist"}</span></button>
+            <a class="btn" href="#/seller/${slug(l.seller)}">All ads by this advertiser</a>
+          </div>
+        </section>
+        ${trustPanel(l)}
+        <div class="rail" style="display:block">${slot()}${slot()}</div>
+      </aside>
+    </div>
+  </main>
+  <div class="stickybar">
+    <button class="btn btn-pri" type="button" onclick="openContact(${l.id})">${IC.mail}<span>${contactLabel(l)}</span></button>
+    <button class="btn icon js-save" data-id="${l.id}" type="button" aria-pressed="${saved.has(l.id)}"
+            aria-label="Save to watchlist" onclick="toggleSave(${l.id})">${IC.bookmark}</button>
+  </div>
+  ${footer()}`;
+}
+
+/* ============================================================
+   VIEW — HOME
+   ============================================================ */
+function viewHome(){
+  const recent = D.slice(0,6);
+  return `
+  ${header("home")}
+  <main class="page">
+    ${slot("top")}
+
+    <section class="hero compact">
+      <h1>Aircraft, parts, engines and hangars — from owners, brokers and dealers.</h1>
+      <form class="searchbar big" onsubmit="doSearch(event)">
+        <input type="search" id="q" aria-label="Search aircraft, parts, models and part numbers"
+               placeholder="Search aircraft, parts, models or part numbers">
+        <button type="submit">${IC.search}<span>Search</span></button>
+      </form>
+      <p class="searchhint">Try <button type="button" onclick="quickSearch('Cessna 172')">Cessna 172</button>
+        · <button type="button" onclick="quickSearch('O-470')">O-470</button>
+        · <button type="button" onclick="quickSearch('GMA 1347')">GMA 1347</button>
+        · <button type="button" onclick="quickSearch('011-00809-00')">P/N 011-00809-00</button></p>
+      <div class="chipscroll">
+        <div class="chips quick">
+          <a href="#/browse" onclick="setKind('aircraft')">Aircraft</a>
+          <a href="#/browse" onclick="setKind('parts')">Parts &amp; avionics</a>
+          <a href="#/browse" onclick="setKind('engines')">Engines</a>
+          <a href="#/browse" onclick="setKind('property')">Hangars &amp; property</a>
+          <a href="#/browse" onclick="setKind('wanted')">Wanted</a>
+        </div>
+      </div>
+    </section>
+
+    ${featBand()}
+
+    <div class="cols">
+      <aside class="facets">
+        <section class="eflyer">
+          <h3>eFLYER <span style="font-family:var(--data);font-size:10.5px;color:var(--ink-3)">Twice weekly</span></h3>
+          <div class="eb">
+            <span class="issue">ISSUE 1023 · 20 AUG 2026</span>
+            <ul>
+              <li>Flying in for Breakfast with Friends — Part 2</li>
+              <li>Smoky AirVenture Arrival — IFR to Oshkosh</li>
+              <li>RV-8 and the Closed Restaurant</li>
+            </ul>
+            <a class="btn" href="#/">Read this issue</a>
+          </div>
+        </section>
+        ${slot()}
+      </aside>
+
+      <div>
+        <div class="sechead">
+          <h2>Most recent listings</h2>
+          <a class="seeall" href="#/browse">See all →</a>
+        </div>
+        <div class="stream">
+          ${recent.map((l,i)=> row(l) + (i===3?`<div class="rowslot">${slot("instream")}</div>`:"")).join("")}
+        </div>
+        <div style="margin-top:var(--s4)"><a class="btn" href="#/browse">Continue browsing all listings</a></div>
+
+        <div class="sechead" style="margin-top:var(--s6)"><h2>Browse by category</h2></div>
+        <div class="catgrid">
+          <a href="#/browse" onclick="setKind('aircraft')"><b>Cessna</b></a>
+          <a href="#/browse" onclick="setKind('aircraft')"><b>Piper</b></a>
+          <a href="#/browse" onclick="setKind('aircraft')"><b>Van's RV</b></a>
+          <a href="#/browse" onclick="setKind('aircraft')"><b>Experimental</b></a>
+          <a href="#/browse" onclick="setKind('parts')"><b>Avionics</b></a>
+          <a href="#/browse" onclick="setKind('engines')"><b>Engines — Piston</b></a>
+          <a href="#/browse" onclick="setKind('property')"><b>Airport Property</b></a>
+          <a href="#/browse" onclick="setKind('wanted')"><b>Wanted</b></a>
+        </div>
+      </div>
+
+      <aside class="rail">
+        ${slot()}${slot()}${slot()}
+      </aside>
+    </div>
+  </main>
+  ${footer()}`;
+}
+
+function footer(){
+  return `<footer class="foot">
+      <p>Barnstormers.com — aviation's marketplace since 1995. Aircraft, parts, engines, hangars and airpark property, posted direct by owners, brokers and dealers.</p>
+    </footer>`;
+}
+
+/* ============================================================
+   VIEW — SEARCH / FILTERS
+   The 20 blank boxes of the current Advanced Search, rebuilt as structured controls
+   over the same columns. Everything here maps to an existing query parameter.
+   ============================================================ */
+function viewSearch(){
+  const mfgs = [...new Set(D.map(l=>l.mfg).filter(Boolean))].sort();
+  const states = [...new Set(D.map(l=>l.seller.state).filter(Boolean))].sort();
+  return `
+  ${header("search")}
+  <main class="page">
+    ${slot("top")}
+    <div class="dcols">
+      <div>
+        <div class="sechead"><h2>Search listings</h2></div>
+        <section class="panel"><div class="pb">
+          <div class="field">
+            <label for="sq">Keyword</label>
+            <input type="search" id="sq" value="${esc(F.q)}" placeholder="Aircraft, parts, models or part numbers"
+                   oninput="F.q=this.value">
+            <p class="hint">Searches headline, description, manufacturer, model, part number and advertiser.</p>
+          </div>
+          <div class="field">
+            <span class="fieldlbl">Listing type</span>
+            <div class="chips">
+              ${KINDS.map(k=>`<button class="chip" type="button" aria-pressed="${F.kinds.has(k.k)}"
+                 onclick="tog('kinds','${k.k}')">${k.label}</button>`).join("")}
+            </div>
+          </div>
+          <div class="fieldrow">
+            <div class="field"><label for="smfg">Manufacturer</label>
+              <select id="smfg" onchange="pickOne('mfgs',this.value)">
+                <option value="">Any manufacturer</option>
+                ${mfgs.map(m=>`<option ${F.mfgs.has(m)?"selected":""}>${esc(m)}</option>`).join("")}
+              </select></div>
+            <div class="field"><label for="smod">Model</label>
+              <input type="text" id="smod" placeholder="e.g. 172, RV-6, O-470"
+                     value="${esc(F.model||"")}" oninput="F.model=this.value"></div>
+            <div class="field"><label for="spn">Part number</label>
+              <input type="text" id="spn" placeholder="e.g. 011-00809-00"
+                     value="${esc(F.pn||"")}" oninput="F.pn=this.value"></div>
+          </div>
+          <div class="fieldrow">
+            <div class="field"><label for="pmin">Price from</label>
+              <input type="number" id="pmin" inputmode="numeric" placeholder="No minimum"
+                     value="${F.min??""}" oninput="F.min=this.value===''?null:Number(this.value)"></div>
+            <div class="field"><label for="pmax">Price to</label>
+              <input type="number" id="pmax" inputmode="numeric" placeholder="No maximum"
+                     value="${F.max??""}" oninput="F.max=this.value===''?null:Number(this.value)"></div>
+            <div class="field"><label for="sst">State / province</label>
+              <select id="sst" onchange="F.state=this.value">
+                <option value="">Anywhere</option>
+                ${states.map(s=>`<option ${F.state===s?"selected":""}>${esc(s)}</option>`).join("")}
+              </select>
+              <p class="hint">Replaces typing comma-separated two-letter codes.</p></div>
+          </div>
+          <div class="field">
+            <label style="display:flex;align-items:center;gap:var(--s3);min-height:44px;cursor:pointer;
+                          font-family:var(--ui);font-size:15px;text-transform:none;letter-spacing:0;color:var(--ink-2)">
+              <input type="checkbox" style="width:18px;height:18px;accent-color:var(--magenta)"
+                     ${F.photos?"checked":""} onchange="F.photos=this.checked"> Only listings with photographs
+            </label>
+          </div>
+          <div class="chips">
+            <button class="btn btn-pri" type="button" onclick="runSearch()">${IC.search}<span>Search</span></button>
+            <button class="btn" type="button" onclick="clearAll();render()">Reset</button>
+          </div>
+        </div></section>
+
+        <section class="panel">
+          <h3>Saved searches</h3>
+          <div class="pb">
+            <p class="hint" style="margin:0 0 var(--s3)">Barnstormers already emails new results for a saved search. This is that feature, given a place to live.</p>
+            ${[["Cessna 172 under $150,000","Aircraft · Cessna · to $150,000","Daily"],
+               ["O-470 cylinders and cores","Engines · Continental","Weekly"],
+               ["Hangars in the Pacific Northwest","Property · WA, OR","Daily"]].map(s=>`
+              <div class="manage" style="border:1px solid var(--rule);border-radius:2px;margin-bottom:var(--s2);background:var(--surface)">
+                <span class="st"><b>${s[0]}</b><br>${s[1]}</span>
+                <span class="expiry ok">${s[2]} email</span>
+                <button class="btn btn-sm" type="button">Edit</button>
+                <button class="btn btn-sm" type="button">Delete</button>
+              </div>`).join("")}
+          </div>
+        </section>
+      </div>
+      <aside>
+        ${slot()}${slot()}
+      </aside>
+    </div>
+  </main>
+  ${footer()}`;
+}
+
+/* ============================================================
+   VIEW — POST AN AD
+   One page. The upgrade decision is a live side-by-side of the seller's own ad.
+   ============================================================ */
+/* Real category names from the live taxonomy. An advertiser may select up to three —
+   which is why one aircraft appears under both "Cessna" and "Single-Engine" today. */
+const CATLIST = ["Aerobatic","Airport Property","Antique-Classic","Avionics","Beechcraft","Biplane",
+  "Business Opportunities","Cessna","Cessna Parts","Cirrus","Employment","Engines - Piston",
+  "Engines - Turbine","Experimental","Float Plane","Glasair","Grumman","Helicopter","Helicopter Parts",
+  "Instruments","Jet","Kit Planes","Light-Sport","Maule","Mooney","Parts For Sale","Parts Wanted",
+  "Piper","Piper Parts","Projects Only","Propeller","Salvage","Services","Single-Engine",
+  "Taildragger","Trainer","Twins","Ultralight","Van's RV","Wanted","Warbird"];
+const MAX_CATS = 3;
+
+let P = { tier:"free", headline:"", price:"", phrase:"For sale", body:"", kind:"aircraft",
+          photos:0, mfg:"", model:"", cats:["Cessna"], catq:"", doc:null,
+          hl:false, web:false, fcat:false, fall:false };
+const CAP = () => P.tier==="free" ? 100 : 600;
+function postTotal(){
+  return (P.tier==="upgraded"?25:0) + (P.hl?10:0) + (P.web?10:0) + (P.fcat?25:0) + (P.fall?100:0);
+}
+function previewListing(tier){
+  return { id:0, kind:P.kind, tier:(tier==="free"?"free":(P.hl?"highlight":"upgraded")),
+    title:P.headline||"Your headline goes here",
+    price:P.price===""?null:Number(P.price), phrase:P.phrase||"For sale",
+    photos: tier==="free" ? 0 : P.photos,
+    body:(P.body||"Your description appears here as buyers will read it.").slice(0, tier==="free"?100:600),
+    mfg:P.mfg, model:P.model, cat:"", posted:"Today",
+    seller:{name:"You", company:"", role:"Owner", city:"Your city", state:"", listings:1, active:1, site:"", domainMatch:false} };
+}
+function viewPost(){
+  return `
+  ${header("post")}
+  <main class="page postpage">
+    <div class="dcols">
+      <div>
+        <div class="sechead"><h2>Post an advertisement</h2></div>
+
+        <section class="panel"><div class="pb">
+          <a class="btn" href="#/hangar/ads">${IC.list}<span>Start from one of your existing ads</span></a>
+          <p class="hint" style="margin-top:var(--s2)">Duplicates everything, then you change what differs. Built for advertisers posting many similar parts.</p>
+        </div></section>
+
+        <section class="panel">
+          <h3>Choose your ad</h3>
+          <div class="pb">
+            <div class="tierpick">
+              <button type="button" aria-pressed="${P.tier==='free'}" onclick="setTier('free')">
+                <span class="pz">Free</span><b>Free ad</b>
+                <span>100 characters. No photographs.</span></button>
+              <button type="button" aria-pressed="${P.tier==='upgraded'}" onclick="setTier('upgraded')">
+                <span class="pz">$25</span><b>Upgraded ad</b>
+                <span>600 characters, 20 photographs, specs and inventory sheets.</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Your advertisement</h3>
+          <div class="pb">
+            <div class="fieldrow">
+              <div class="field"><label for="ph">Headline</label>
+                <input type="text" id="ph" maxlength="40" value="${esc(P.headline)}" placeholder="1966 Cessna Skyhawk 172G"
+                       oninput="P.headline=this.value;paintPreview()"></div>
+              <div class="field"><label for="pp">Price</label>
+                <input type="number" id="pp" inputmode="numeric" value="${P.price}" placeholder="Leave blank for no price"
+                       oninput="P.price=this.value;paintPreview()"></div>
+            </div>
+            <div class="fieldrow">
+              <div class="field"><label for="pk">Listing type</label>
+                <select id="pk" onchange="P.kind=this.value;paintPreview()">
+                  ${KINDS.map(k=>`<option value="${k.k}" ${P.kind===k.k?"selected":""}>${k.label}</option>`).join("")}
+                </select></div>
+              <div class="field"><label for="pm">Manufacturer</label>
+                <input type="text" id="pm" value="${esc(P.mfg)}" placeholder="Cessna"
+                       oninput="P.mfg=this.value;paintPreview()"></div>
+              <div class="field"><label for="pmo">Model</label>
+                <input type="text" id="pmo" value="${esc(P.model)}" placeholder="172"
+                       oninput="P.model=this.value;paintPreview()"></div>
+            </div>
+            <div class="field"><label for="pa">Action phrase</label>
+              <input type="text" id="pa" maxlength="30" value="${esc(P.phrase)}" placeholder="For sale"
+                     oninput="P.phrase=this.value;paintPreview()">
+              <p class="hint">Your own words. Sellers here use everything from "Available" to "Age forces sale".</p></div>
+            <div class="field"><label for="pb">Description</label>
+              <textarea id="pb" oninput="P.body=this.value;paintPreview()"
+                placeholder="Total time, engine time, avionics, damage history, annual…">${esc(P.body)}</textarea>
+              <div class="counter" id="counter">${counterHtml()}</div></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Categories</h3>
+          <div class="pb">
+            <p class="hint" style="margin:0 0 var(--s3)">Choose up to ${MAX_CATS}. Your advertisement appears in each one, and each is a place buyers browse.</p>
+            ${P.cats.length?`<div class="chips" style="margin-bottom:var(--s3)">
+              ${P.cats.map(c=>`<button class="chip" type="button" aria-pressed="true" onclick="toggleCat(${JSON.stringify(c)})">${esc(c)} <span class="x">×</span></button>`).join("")}
+            </div>`:""}
+            <div class="field" style="margin-bottom:var(--s2)">
+              <input type="search" placeholder="Find a category…" value="${esc(P.catq)}"
+                     aria-label="Find a category" oninput="P.catq=this.value;paintCats()">
+            </div>
+            <div class="catpick" id="catpick">${catPickHtml()}</div>
+            <p class="counter" style="margin-top:var(--s2)">
+              <span class="${P.cats.length>=MAX_CATS?"over":""}">${P.cats.length} of ${MAX_CATS} selected</span></p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Photographs</h3>
+          <div class="pb">
+            ${P.tier==="free"
+              ? `<div class="drop"><b>Photographs are not included with a free ad</b>
+                   <span>Switch to the upgraded ad to add up to 20.</span></div>`
+              : `<div class="drop"><b>Drag photographs here, or choose files</b>
+                   <span>Up to 20. Add them all at once — no need to upload one at a time.</span></div>
+                 <div class="photos">
+                   ${Array.from({length:P.photos}).map((_,i)=>`<span class="p" style="background:${tone(7,i)}">${IC.plane}</span>`).join("")}
+                   <button class="btn" type="button" onclick="addPhotos()" style="height:50px;min-height:50px">+ Add</button>
+                 </div>
+                 <p class="hint">${P.photos} of 20 added.</p>`}
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Specification &amp; inventory sheet</h3>
+          <div class="pb">
+            ${P.tier==="free"
+              ? `<div class="drop"><b>Not included with a free ad</b>
+                   <span>Upgraded advertisements can attach one specification sheet and one inventory sheet.</span></div>`
+              : P.doc
+                ? `<div class="chips"><span class="btn" style="cursor:default">${IC.doc}<span>${esc(P.doc)}</span></span>
+                     <button class="btn btn-sm" type="button" onclick="setDoc()">Remove</button></div>
+                   <p class="hint" style="margin-top:var(--s2)">Buyers download this from your advertisement. PDF, Word, Excel or plain text.</p>`
+                : `<div class="drop"><b>Attach a specification or inventory sheet</b>
+                     <span>PDF, Word, Excel or plain text. This is how advertisers publish detail past the ${P.tier==="free"?100:600}-character limit.</span></div>
+                   <div style="margin-top:var(--s3)"><button class="btn" type="button" onclick="setDoc()">${IC.doc}<span>Choose a file</span></button></div>`}
+          </div>
+        </section>
+
+        <section class="panel">
+          <h3>Upgrades</h3>
+          <div class="ups">
+            <label><input type="checkbox" ${P.hl?"checked":""} onchange="setUpgrade('hl',this.checked)">
+              <span class="ub"><span class="ut">Highlight my ad</span>
+              <span class="ud">A tinted background and accent rule in the listings.</span></span>
+              <span class="up">$10</span></label>
+            <label><input type="checkbox" ${P.web?"checked":""} onchange="setUpgrade('web',this.checked)">
+              <span class="ub"><span class="ut">Link to my website</span>
+              <span class="ud">Adds an outbound link to your own site.</span></span>
+              <span class="up">$10</span></label>
+            <label><input type="checkbox" ${P.fcat?"checked":""} onchange="setUpgrade('fcat',this.checked)">
+              <span class="ub"><span class="ut">Featured in my categories</span>
+              <span class="ud">Pinned above the listings in each category you choose.</span></span>
+              <span class="up">$25</span></label>
+            <label><input type="checkbox" ${P.fall?"checked":""} onchange="setUpgrade('fall',this.checked)">
+              <span class="ub"><span class="ut">Featured in all categories</span>
+              <span class="ud">Pinned on the most-recent listings page — the busiest page on the site.</span></span>
+              <span class="up">$100</span></label>
+            <div class="total"><span class="tl">Total for 30 days</span><span class="tv">$${postTotal()}.00</span></div>
+          </div>
+          <div class="pb" style="border-top:1px solid var(--rule-2)">
+            <div class="chips">
+              <button class="btn btn-pri" type="button">${postTotal()?`Preview and pay $${postTotal()}.00`:"Publish free ad"}</button>
+              <button class="btn" type="button">Save as draft</button>
+            </div>
+            <p class="hint" style="margin-top:var(--s2)">Your ad runs for 30 days and can be renewed each month, which returns it to the top of the listings.</p>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section class="panel" id="pvpanel">
+          <h3>How your ad will look</h3>
+          <div class="pb" id="pvwrap">${previewHtml()}</div>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <div class="stickybar postbar">
+    <span class="postsum"><b>$${postTotal()}.00</b><small>for 30 days</small></span>
+    <button class="btn btn-pri" type="button" onclick="scrollToPreview()">Preview my ad</button>
+  </div>
+  ${footer()}`;
+}
+function scrollToPreview(){
+  const p = document.getElementById("pvpanel");
+  if(p && p.scrollIntoView) p.scrollIntoView({block:"start"});
+}
+function counterHtml(){
+  const n=P.body.length, cap=CAP(), over=n>cap;
+  const left = `<span class="${over?"over":""}">${n} / ${cap} characters${over?" — "+(n-cap)+" over":""}</span>`;
+  /* The nudge appears as the free limit approaches. It is the moment the upgrade
+     decision is actually made, so it names what the money buys. */
+  const right = over
+    ? `<span class="over">Trim, or upgrade for 600 characters and photographs</span>`
+    : (P.tier==="free" && n>60
+        ? `<span class="cap">$25 buys 600 characters and 20 photographs</span>`
+        : `<span class="cap"></span>`);
+  return left + right;
+}
+function previewHtml(){
+  const n = P.body.length;
+  /* While no photographs are added, the upgraded preview shows where they will go as
+     dashed ghosts — including while the free tier is selected, which is exactly when
+     the upgraded panel needs to make the $25 visible without faking content. */
+  const ghosts = (P.photos===0) ? `
+    <div class="ghosts">
+      <span class="ph"></span><span class="ph"></span><span class="ph"></span>
+      <span class="ph more">up to 20</span>
+    </div>
+    <p class="pvnote" style="padding:0 var(--s4) var(--s3);margin:0">Your photographs appear here.</p>` : "";
+  return `<div class="pvwrap">
+    <div class="pv ${P.tier==='free'?'on':''}"><h4>Free<span>$0</span></h4>
+      ${row(previewListing("free"))}
+      <p class="pvnote" style="padding:0 var(--s4) var(--s3);margin:0">Complete as it stands — free ads are text-only by design.</p>
+    </div>
+    <div class="pv ${P.tier!=='free'?'on':''}"><h4>Upgraded<span>$25</span></h4>
+      ${row(previewListing("upgraded"))}${ghosts}
+    </div>
+  </div>
+  <p class="pvdh">What $25 adds</p>
+  <ul class="pvdelta">
+    <li><span><b>600 characters</b> instead of 100${n>100?` — your description already needs it (${n})`:""}</span></li>
+    <li><span><b>Up to 20 photographs</b>${P.photos?` — ${P.photos} added`:""}</span></li>
+    <li><span><b>Specification &amp; inventory sheet</b>${P.doc?` — ${esc(P.doc)} attached`:""}</span></li>
+  </ul>`;
+}
+function paintPreview(){
+  const w=document.getElementById("pvwrap"); if(w) w.innerHTML=previewHtml();
+  const c=document.getElementById("counter"); if(c) c.innerHTML=counterHtml();
+}
+function catPickHtml(){
+  const q=(P.catq||"").toLowerCase();
+  const list=CATLIST.filter(c=>c.toLowerCase().indexOf(q)>-1).slice(0,40);
+  if(!list.length) return `<p class="hint" style="padding:var(--s3)">No category matches "${esc(P.catq)}".</p>`;
+  const full=P.cats.length>=MAX_CATS;
+  return list.map(c=>{
+    const on=P.cats.indexOf(c)>-1;
+    return `<button type="button" class="catopt" aria-pressed="${on}" ${(!on&&full)?"disabled":""}
+      onclick="toggleCat(${JSON.stringify(c)})">${esc(c)}</button>`;
+  }).join("");
+}
+function paintCats(){
+  const el=document.getElementById("catpick");
+  if(el) el.innerHTML=catPickHtml();
+}
+function toggleCat(c){
+  const i=P.cats.indexOf(c);
+  if(i>-1) P.cats.splice(i,1);
+  else if(P.cats.length<MAX_CATS) P.cats.push(c);
+  render();
+}
+function setDoc(){ P.doc = P.doc ? null : "Specs_and_Inventory.pdf"; render(); }
+let sellerKind = "";
+function setSellerKind(k){ sellerKind = k; render(); }
+function renewAd(id){ renewed.add(id); render(); toast("Renewed — back at the top of the listings"); }
+function markSold(id){ sold.add(id); render(); toast("Marked sold"); }
+function renewExpiring(){
+  const before = renewed.size;
+  D.filter(l=>slug(l.seller)==="alpine-airparts").slice(0,4)
+   .forEach((l,i)=>{ if([3,18,24,11][i]<=5) renewed.add(l.id); });
+  const n = renewed.size - before;
+  render();
+  toast(n ? n+" advertisement"+(n===1?"":"s")+" renewed" : "Nothing expiring within 5 days");
+}
+function setTier(t){ P.tier=t; if(t==="free"){ P.photos=0; P.doc=null; } render(); }
+function addPhotos(){ P.photos=Math.min(20,P.photos+3); render(); }
+function setUpgrade(k,on){ P[k]=!!on; render(); }
+function postState(){ return P; }
+
+/* ============================================================
+   VIEW — MY HANGAR
+   ============================================================ */
+function viewHangar(tab){
+  tab = tab || "ads";
+  const mine = D.filter(l=>slug(l.seller)==="alpine-airparts").slice(0,4);
+  const tabs = [["ads","My ads"],["watchlist","Watchlist"],["searches","Saved searches"],["billing","Billing"],["account","Account"]];
+  let body="";
+
+  if(tab==="ads"){
+    body = `
+      <div class="tiles">
+        <div><b>96</b><span>Active ads</span></div>
+        <div><b>412</b><span>Posted all time</span></div>
+        <div><b>3</b><span>Expiring this week</span></div>
+        <div><b>1,284</b><span>Views this month</span></div>
+      </div>
+      <div class="chips" style="margin-bottom:var(--s3)">
+        <a class="btn btn-pri" href="#/post">${IC.plane}<span>Post a new advertisement</span></a>
+        <button class="btn" type="button" onclick="renewExpiring()">Renew all expiring</button>
+      </div>
+      <div class="stream">
+        ${mine.map((l,i)=>{
+          const views=[214,88,431,52][i], enq=[9,3,17,2][i];
+          const days = renewed.has(l.id) ? 30 : [3,18,24,11][i];
+          const soon = days<=5;
+          return `
+          ${row(l)}
+          <div class="manage">
+            <span class="st"><b>${views}</b> views · <b>${enq}</b> enquiries${sold.has(l.id)?" · <b>Sold</b>":""}</span>
+            <span class="expiry ${soon&&!sold.has(l.id)?"":"ok"}">${sold.has(l.id)?"Marked sold":"Expires in "+days+" day"+(days===1?"":"s")}</span>
+            <button class="btn btn-sm" type="button" onclick="renewAd(${l.id})"
+              ${renewed.has(l.id)||sold.has(l.id)?"disabled":""}>${renewed.has(l.id)?"Renewed":"Renew"}</button>
+            <button class="btn btn-sm" type="button">Edit</button>
+            <a class="btn btn-sm" href="#/post">Duplicate</a>
+            <button class="btn btn-sm" type="button" onclick="markSold(${l.id})"
+              ${sold.has(l.id)?"disabled":""}>${sold.has(l.id)?"Sold":"Mark sold"}</button>
+          </div>`;}).join("")}
+      </div>
+      `;
+  } else if(tab==="watchlist"){
+    const w = D.filter(l=>saved.has(l.id));
+    const note = "";
+    body = note + (w.length
+      ? `<div class="stream">${w.map(row).join("")}</div>`
+      : `<div class="empty"><b>Nothing saved yet.</b>Save a listing from anywhere in the marketplace and it appears here.<div style="margin-top:var(--s4)"><a class="btn" href="#/browse">Browse listings</a></div></div>`);
+  } else if(tab==="searches"){
+    body = `
+      <p class="hint" style="margin-bottom:var(--s3)">Barnstormers already emails you new results for a saved search. Here they can be managed.</p>
+      ${[["Cessna 172 under $150,000","Aircraft · Cessna · to $150,000","Daily",true],
+         ["O-470 cylinders and cores","Engines · Continental","Weekly",true],
+         ["Hangars in the Pacific Northwest","Property · WA, OR","Paused",false]].map(s=>`
+        <div class="manage" style="border:1px solid var(--rule);border-radius:2px;margin-bottom:var(--s2);background:var(--surface)">
+          <span class="st"><b>${s[0]}</b><br>${s[1]}</span>
+          <span class="expiry ${s[3]?"ok":""}">${s[2]}</span>
+          <button class="btn btn-sm" type="button">${s[3]?"Pause":"Resume"}</button>
+          <button class="btn btn-sm" type="button">Run</button>
+          <button class="btn btn-sm" type="button">Delete</button>
+        </div>`).join("")}`;
+  } else if(tab==="billing"){
+    body = `
+      <div class="tw"><table>
+        <thead><tr><th>Date</th><th>Advertisement</th><th>Item</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>24 Aug 2026</td><td>Cessna 172 nose landing gear</td><td>Upgraded ad</td><td class="m">$25.00</td></tr>
+          <tr><td>24 Aug 2026</td><td>Cessna 172 nose landing gear</td><td>Featured — all categories</td><td class="m">$100.00</td></tr>
+          <tr><td>18 Aug 2026</td><td>Garmin GMA 1347 audio panel</td><td>Upgraded ad</td><td class="m">$25.00</td></tr>
+          <tr><td>18 Aug 2026</td><td>Garmin GMA 1347 audio panel</td><td>Highlight</td><td class="m">$10.00</td></tr>
+          <tr><td>02 Aug 2026</td><td>Semi load Falcon 10 parts</td><td>Upgraded ad</td><td class="m">$25.00</td></tr>
+        </tbody>
+      </table></div>
+      <p class="hint">Card on file ending 4417. Receipts can be printed for your accounts.</p>`;
+  } else {
+    body = `
+      <section class="panel"><div class="pb">
+        <div class="fieldrow">
+          <div class="field"><label for="afn">First name</label><input type="text" id="afn" value="Walter"></div>
+          <div class="field"><label for="aln">Last name</label><input type="text" id="aln" value="Bagdasarian"></div>
+        </div>
+        <div class="field"><label for="aco">Aviation company</label><input type="text" id="aco" value="Alpine Airparts"></div>
+        <div class="field"><label for="aem">Email</label><input type="email" id="aem" value="sales@alpineairparts.com"></div>
+        <div class="fieldrow">
+          <div class="field"><label for="aci">City</label><input type="text" id="aci" value="El Cajon"></div>
+          <div class="field"><label for="ast">State</label><input type="text" id="ast" value="CA"></div>
+          <div class="field"><label for="azp">ZIP</label><input type="text" id="azp" value="92020"></div>
+        </div>
+        <div class="field">
+          <label style="display:flex;align-items:center;gap:var(--s3);min-height:44px;cursor:pointer;
+                        font-family:var(--ui);font-size:15px;text-transform:none;letter-spacing:0;color:var(--ink-2)">
+            <input type="checkbox" checked style="width:18px;height:18px;accent-color:var(--magenta)">
+            Show my telephone numbers on my advertisements
+          </label>
+        </div>
+        <button class="btn btn-pri" type="button">Save changes</button>
+      </div></section>`;
+  }
+
+  return `
+  ${header("hangar")}
+  <main class="page">
+    ${slot("top")}
+    <div class="sechead"><h2>My Hangar</h2><span class="ct">Alpine Airparts</span></div>
+    <nav class="tabs">${tabs.map(t=>`<a href="#/hangar/${t[0]}" class="${tab===t[0]?"on":""}">${t[1]}</a>`).join("")}</nav>
+    ${body}
+  </main>
+  ${footer()}`;
+}
+
+/* ============================================================
+   VIEW — SELLER / ADVERTISER PROFILE
+   The page that does not exist today: ?userid= renders as "Search Results".
+   ============================================================ */
+function viewSeller(id){
+  const s = sellerOf(id);
+  if(!s) return header("browse")+`<main class="page"><div class="empty"><b>Advertiser not found.</b><a class="btn" href="#/browse">Back to browse</a></div></main>`;
+  const ads = adsBySeller(id);
+  const kindsHere = [...new Set(ads.map(a=>a.kind))];
+  const shown = sellerKind ? ads.filter(a=>a.kind===sellerKind) : ads;
+  const withPhoto = ads.filter(a=>a.photos>0).length;
+  /* Whether an advertiser trades as a business is already in the data — they either
+     registered a company name or they did not. */
+  const isTrade = !!s.company;
+  return `
+  ${header("browse")}
+  <main class="page">
+    ${slot("top")}
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href="#/browse">All listings</a><span class="sep">›</span>
+      <span class="cur">${esc(s.company||s.name)}</span>
+    </nav>
+
+    <section class="sellerhead">
+      <h1>${esc(s.company||s.name)}</h1>
+      <p class="sub"><span class="kind" style="margin-right:var(--s2)">${isTrade?(s.role&&/broker/i.test(s.role)?"Broker":"Trade advertiser"):"Private advertiser"}</span>
+        ${s.company?esc(s.name)+(s.role?", "+esc(s.role):"")+" · ":""}<span class="loc">${esc(loc(s))}</span></p>
+      <div class="tiles" style="margin-bottom:0">
+        <div><b>${s.active}</b><span>Active ads</span></div>
+        <div><b>${s.listings.toLocaleString()}</b><span>Posted all time</span></div>
+        <div><b>${withPhoto}</b><span>With photographs</span></div>
+      </div>
+      ${s.domainMatch&&s.site?`<p class="safety" style="border:1px solid var(--rule);border-top:1px solid var(--rule);margin-top:var(--s3)">
+        ${IC.check}<span>Contact email is on <b>${esc(s.site)}</b>, the website listed on these advertisements.</span></p>`:""}
+      
+    </section>
+
+    <div class="dcols">
+      <div>
+        <div class="sechead"><h2>Advertisements</h2></div>
+        ${kindsHere.length>1?`<div class="chipscroll" style="margin-bottom:var(--s3)"><div class="chips">
+          <button class="chip" type="button" aria-pressed="${!sellerKind}" onclick="setSellerKind('')">All</button>
+          ${kindsHere.map(k=>`<button class="chip" type="button" aria-pressed="${sellerKind===k}"
+            onclick="setSellerKind('${k}')">${kindLabel(k)}</button>`).join("")}
+        </div></div>`:""}
+        <div class="stream">${shown.length?shown.map(row).join("")
+          :`<div class="empty"><b>Nothing in that category.</b>This advertiser has no active listings of that type.</div>`}</div>
+      </div>
+      <aside>
+        <section class="panel">
+          <h3>Contact</h3>
+          <div class="contact">
+            <p class="selname">${esc(s.company||s.name)}</p>
+            <p class="selrole"><span class="loc">${esc(loc(s))}</span></p>
+            <button class="btn btn-pri" type="button" onclick="openContact(${ads[0].id})">${IC.mail}<span>${contactLabel(ads[0])}</span></button>
+            ${s.showPhone?`<a class="btn" href="tel:${s.phone.replace(/[^0-9]/g,"")}">${IC.phone}<span style="font-family:var(--data)">${s.phone}</span></a>`:""}
+            ${s.site?`<a class="btn" href="#/seller/${id}">${esc(s.site)}</a>`:""}
+          </div>
+          <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+        </section>
+        ${slot()}
+      </aside>
+    </div>
+  </main>
+  ${footer()}`;
+}
+
+/* ============================================================
+   ROUTER + ACTIONS
+   ============================================================ */
+function render(){
+  const h = location.hash || "#/";
+  const app = document.getElementById("app");
+  const m = h.match(/^#\/l\/(\d+)/);
+  const sel = h.match(/^#\/seller\/([a-z0-9-]+)/);
+  const hg  = h.match(/^#\/hangar(?:\/([a-z]+))?/);
+  if(m)                             galIdx = 0;
+  if(m)                             app.innerHTML = viewDetail(parseInt(m[1],10));
+  else if(sel)                      app.innerHTML = viewSeller(sel[1]);
+  else if(hg)                       app.innerHTML = viewHangar(hg[1]);
+  else if(h.startsWith("#/search")) app.innerHTML = viewSearch();
+  else if(h.startsWith("#/post"))   app.innerHTML = viewPost();
+  else if(h.startsWith("#/browse")) app.innerHTML = viewBrowse();
+  else                              app.innerHTML = viewHome();
+  /* Filter changes re-render the whole view, so the sheet has to be reopened
+     afterwards — otherwise ticking a box on mobile dismisses the sheet. */
+  const sh = document.getElementById("sheet");
+  if(sheetOpen && sh) sh.classList.add("open");
+  const ss = document.getElementById("sortsheet");
+  if(sortOpen && ss) ss.classList.add("open");
+  if(navAnim && !sheetOpen && !sortOpen){
+    const pg = app.querySelector ? app.querySelector("main") : null;
+    if(pg) pg.classList.add("enter");
+  }
+  navAnim = false;
+  if(!sheetOpen && !sortOpen) window.scrollTo(0,0);
+  syncButtons();
+}
+
+/* The whole row opens the listing, so the title link is the only navigation affordance
+   needed and the row's two buttons can both be real actions. Clicks that land on a
+   control inside the row are left alone. */
+function rowClick(e,id){
+  if(!id) return;                            /* preview rows are not navigable */
+  if(e.target.closest("button,a")) return;
+  location.hash = "#/l/"+id;
+}
+function pickOne(group,val){ F[group] = val ? new Set([val]) : new Set(); render(); }
+function saveSearch(btn){
+  const box = btn.closest(".savesearch");
+  box.classList.add("done");
+  box.querySelector("span").innerHTML =
+    "<b>Saved.</b> New matching listings will be emailed to you. Manage it in My Hangar.";
+  btn.outerHTML = '<a class="btn btn-sm" href="#/hangar/searches">Saved searches</a>';
+}
+function runSearch(){ location.hash="#/browse"; render(); }
+function quickSearch(t){ F.q=t; location.hash="#/browse"; render(); }
+function doSearch(e){
+  e.preventDefault();
+  const el = e.target.querySelector("#q");
+  F.q = el ? el.value.trim() : "";
+  if(!location.hash.startsWith("#/browse")) location.hash = "#/browse"; else render();
+}
+function tog(group,val){
+  const s = F[group];
+  s.has(val) ? s.delete(val) : s.add(val);
+  render();
+}
+function setKind(k){ F.kinds = new Set([k]); setTimeout(render,0); }
+function togPhotos(){ F.photos = !F.photos; render(); }
+function setPrice(which,v){ F[which] = v===""?null:Number(v); render(); }
+function clearPrice(){ F.min=null; F.max=null; render(); }
+function setSort(s){ F.sort=s; render(); }
+function clearAll(){ F={q:F.q,kinds:new Set(),mfgs:new Set(),min:null,max:null,photos:false,
+                        model:"",pn:"",state:"",sort:F.sort}; render(); }
+function openSheet(){ sheetOpen=true; const s=document.getElementById("sheet"); if(s) s.classList.add("open"); }
+function closeSheet(){ sheetOpen=false; const s=document.getElementById("sheet"); if(s) s.classList.remove("open"); }
+function openSort(){ sortOpen=true; const s=document.getElementById("sortsheet"); if(s) s.classList.add("open"); }
+function closeSort(){ sortOpen=false; const s=document.getElementById("sortsheet"); if(s) s.classList.remove("open"); }
+
+/* Contact does not assume email. It offers whatever the advertiser actually published. */
+function openContact(id){
+  const l=D.find(x=>x.id===id); if(!l) return;
+  const s=l.seller, who=contactRole(l);
+  const box=document.getElementById("contact");
+  box.innerHTML = `
+    <div class="scrim" onclick="closeContact()"></div>
+    <div class="body">
+      <div class="sh"><b>${contactLabel(l)}</b>
+        <button class="btn btn-sm" type="button" onclick="closeContact()">Close</button></div>
+      <div class="contactwho">
+        <b>${esc(s.company||s.name)}</b>
+        <span>${s.company?esc(s.name)+(s.role?", "+esc(s.role):""):esc(s.role||"Private "+who)}</span>
+        <span class="loc">${esc(loc(s))}</span>
+      </div>
+      <div class="contactlist">
+        <button class="btn btn-pri" type="button">${IC.mail}<span>Send a message</span></button>
+        ${s.showPhone
+          ? `<a class="btn" href="tel:${s.phone.replace(/[^0-9]/g,"")}">${IC.phone}<span class="num">${s.phone}</span></a>`
+          : ""}
+        <button class="btn" type="button" onclick="closeContact()">${IC.bookmark}<span>Save this listing instead</span></button>
+      </div>
+      ${s.showPhone ? "" : `<p class="nophone">This advertiser has not published a telephone number. Messages reach them by email.</p>`}
+      <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+    </div>`;
+  box.classList.add("open");
+}
+function closeContact(){ const b=document.getElementById("contact"); if(b) b.classList.remove("open"); }
+document.addEventListener("keydown",function(e){
+  if(e.key==="Escape"){ closeContact(); closeSheet(); closeSort(); return; }
+  /* arrow keys page through a listing's photographs — never while typing */
+  if(e.key!=="ArrowLeft" && e.key!=="ArrowRight") return;
+  if(e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName||"")) return;
+  if(!/^#\/l\//.test(location.hash)) return;
+  const strip = document.querySelectorAll('.gal .strip button[aria-label^="Photograph"]');
+  if(!strip.length) return;
+  let i = galIdx + (e.key==="ArrowRight" ? 1 : -1);
+  i = Math.max(0, Math.min(strip.length-1, i));
+  if(i !== galIdx) strip[i].click();
+});
+/* Every meaningful action confirms itself — the skill library's "success feedback" rule. */
+function toast(msg){
+  const box = document.getElementById("toastbox");
+  if(!box || !box.appendChild) return;
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  box.appendChild(t);
+  void t.offsetWidth;            /* force a reflow so the transition runs from the hidden state */
+  t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); setTimeout(function(){ t.remove(); }, 250); }, 2200);
+}
+
+function toggleSave(id){
+  saved.has(id) ? saved.delete(id) : saved.add(id);
+  const on = saved.has(id);
+  /* every control bound to this listing updates together — row, sidebar and sticky bar */
+  document.querySelectorAll('.js-save[data-id="'+id+'"]').forEach(function(b){
+    b.setAttribute("aria-pressed", on);
+    const lab = b.querySelector("span[data-on]");
+    if(lab) lab.textContent = on ? lab.dataset.on : lab.dataset.off;
+  });
+  toast(on ? "Saved to your watchlist" : "Removed from your watchlist");
+}
+function pickPhoto(id,i,btn){
+  galIdx = i;
+  const main = document.getElementById("galmain");
+  if(main) main.style.background = tone(id,i);
+  const l = D.find(x=>x.id===id);
+  const pos = document.getElementById("galpos");
+  if(pos && l) pos.textContent = "Photograph "+(i+1)+" of "+l.photos;
+  btn.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current","false"));
+  btn.setAttribute("aria-current","true");
+}
+
+/* review chrome */
+function setTheme(t){
+  const r=document.documentElement;
+  t===null ? r.removeAttribute("data-theme") : r.setAttribute("data-theme",t);
+  syncButtons();
+}
+function setView(v){ document.documentElement.setAttribute("data-view",v); syncButtons(); }
+const LOCKED = true;
+function setMode(m){
+  MODE = LOCKED ? "client" : m;
+  document.documentElement.setAttribute("data-mode", MODE);
+  const pill = document.getElementById("reviewpill");
+  if(pill) pill.hidden = LOCKED || MODE !== "client";
+  render();
+}
+function syncButtons(){
+  const th = document.documentElement.getAttribute("data-theme") || "sys";
+  document.querySelectorAll("#reviewbar [data-th]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.th===th));
+  const vw = document.documentElement.getAttribute("data-view") || "wide";
+  document.querySelectorAll("#reviewbar [data-vw]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.vw===vw));
+  document.querySelectorAll("#reviewbar [data-md]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.md===MODE));
+}
+
+window.addEventListener("hashchange", function(){ navAnim = true; render(); });
+function paintScrolled(){
+  document.documentElement.setAttribute("data-scrolled", window.scrollY > 4 ? "1" : "0");
+}
+window.addEventListener("scroll", paintScrolled, {passive:true});
+paintScrolled();
+document.documentElement.setAttribute("data-view","wide");
+setMode(LOCKED ? "client" : "review");
+</script>
