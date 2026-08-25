@@ -52,7 +52,7 @@
   --ease:cubic-bezier(.2,.7,.3,1);
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
+  :root[data-theme="dark"]{
     --paper:#070a12; --surface:#0e1420; --sunk:#141b29;
     --ink:#f4f2ec; --ink-2:#cfd4dd; --ink-3:#9aa2b1;
     --rule:rgba(255,255,255,.10); --rule-2:rgba(255,255,255,.06);
@@ -708,13 +708,14 @@ main.page.enter{animation:pageIn .22s var(--ease) both}
   transition:opacity .18s var(--ease),transform .18s var(--ease);text-align:center;white-space:nowrap;
   overflow:hidden;text-overflow:ellipsis;border:1px solid rgba(255,255,255,.08)}
 :root[data-theme="dark"] .toast{background:#fafafa;color:#18181b;border-color:transparent}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .toast{background:#fafafa;color:#18181b;border-color:transparent}}
+@media (prefers-color-scheme:dark){:root[data-theme="dark"] .toast{background:#fafafa;color:#18181b;border-color:transparent}}
 .toast.show{opacity:1;transform:none}
 
 
 /* ============================================================
-   BRAND ALIGNMENT LAYER - match index.html visual system
-   (Fraunces display, navy header/hero, amber accents)
+   BRAND ALIGNMENT LAYER v2 - ivory editorial (match index.html)
+   Fraunces display + serif amber prices; light chrome; the
+   golden-hour sky tiles come from tone() in the script below.
    ============================================================ */
 h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .dtitle{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
@@ -726,32 +727,16 @@ h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .rprice.odd{color:var(--ink-3)}
 .feat .fp{font-family:var(--serif);font-weight:560;font-size:14px;color:var(--accent-text)}
 .pz{font-family:var(--serif);font-weight:560}
-/* navy header in both themes - mirrors the homepage nav */
-.hdr{background:#070a12;border-bottom:1px solid rgba(255,255,255,.08)}
-.hdr .brand{color:#f4f2ec}
-.hdr .brand .wordmark small{color:#9aa2b1}
-.navlinks a{color:#c6ccd8}
-.navlinks a:hover{color:#fff;background:rgba(255,255,255,.07)}
-.navlinks a.on{color:#fff}
-.mobnav{background:#070a12;border-top:1px solid rgba(255,255,255,.08)}
-.mobnav a{color:#c6ccd8}
-.mobnav a.on{color:#fff}
-.hdr .searchbar{background:#fff;border-color:rgba(255,255,255,.16)}
-.hdr .searchbar input{color:#141821}
-.hdr .searchbar input::placeholder{color:#5d6470}
-.hdr .searchbar button{color:#5d6470}
-.hdr .searchbar button:hover{color:#141821;background:#f0eee9}
-/* navy hero card on the app home - mirrors the homepage hero */
-.hero.compact{background:#070a12;border-color:#070a12}
-.hero.compact h1{color:#f4f2ec;font-size:clamp(19px,2.6vw,25px)}
-.hero.compact .searchbar.big{background:#fff;border-color:transparent}
-.hero.compact .searchbar.big input{color:#141821}
-.hero.compact .searchbar.big input::placeholder{color:#5d6470}
-.hero.compact .searchhint{color:#9aa2b1}
-.hero.compact .searchhint button{color:#e8e6df}
-.hero.compact .searchhint button:hover{color:#f0941f;background:rgba(255,255,255,.08)}
-.hero.compact .quick a{background:#fff;color:#3d434f;border-color:transparent}
-.hero.compact .quick a:hover{background:#f0eee9;color:#141821}
+/* silhouettes read as distant aircraft against the sky tiles */
+.feat .img{color:#474753}
+.feat .img svg{opacity:.45}
+.ph:not(.more){color:#474753}
+.ph svg{opacity:.5}
+.gal .main{color:#474753}
+.gal .main svg{opacity:.38}
+/* editorial sky hero on the app home */
+.hero.compact{background:linear-gradient(150deg,#e3ebf5 0%,#f4e8d6 55%,#f1dcbd 100%);border-color:#e9dfcd}
+.hero.compact .searchbar.big{background:#fff}
 </style>
 
 
@@ -1050,7 +1035,13 @@ const kindIcon = k => k==="property" ? IC.hangar : k==="engines" ? IC.cog : k===
 
 /* Photo placeholder tone. Deterministic per listing so the stream looks varied rather than
    repeated, and expressed as a color-mix against theme tokens so it follows light/dark. */
-function tone(id,i){ const h=(id*37+i*61)%12; return `color-mix(in srgb, var(--ink) ${4+h}%, var(--sunk))`; }
+function tone(id,i){ const SKIES=[
+  "linear-gradient(150deg,#e3ebf5 0%,#f5e8d3 62%,#f2ddba 100%)",   /* dawn */
+  "linear-gradient(150deg,#dbe7f2 0%,#ecebe0 70%,#efe4cd 100%)",   /* day */
+  "linear-gradient(150deg,#f3e2c4 0%,#eecea2 100%)",               /* golden hour */
+  "linear-gradient(150deg,#dcd7e4 0%,#efd7bd 100%)",               /* dusk */
+  ]; return SKIES[(id*37+i*61)%4]; }
+function tone_unused(id,i){ const h=(id*37+i*61)%12; return `color-mix(in srgb, var(--ink) ${4+h}%, var(--sunk))`; }
 function phBox(l,i,cls){
   return `<span class="${cls||'ph'}" style="background:${tone(l.id,i)}">${kindIcon(l.kind)}</span>`;
 }
