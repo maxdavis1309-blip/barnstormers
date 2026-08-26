@@ -4,6 +4,9 @@
 <title>Barnstormers Modernized</title>
 <meta name="description" content="Barnstormers Modernized — interactive marketplace demo. Aircraft, parts, engines, hangars and property.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Barnstormers marketplace concept — browse aircraft, parts, engines, hangars and property; post and manage advertisements.">
+<meta name="theme-color" content="#f8f6f1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2038'%3E%3Cpath%20fill='%23c2351b'%20d='M2%2026C14%2020%2030%2010%2058%202L46%2014C36%2021%2022%2026%2010%2028Z'/%3E%3Cpath%20fill='%23c2351b'%20opacity='.55'%20d='M6%2034C16%2030%2028%2024%2044%2018L36%2027C28%2032%2018%2034%2010%2035Z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,420;0,9..144,560;1,9..144,380;1,9..144,480&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Geist+Mono:wght@400;500;600&display=swap">
@@ -146,8 +149,8 @@ button{font:inherit}
   border-radius:var(--r-full);background:var(--magenta)}
 @media (max-width:860px){.navlinks{display:none}}
 .mobnav{display:none;border-top:1px solid var(--rule-2);background:var(--surface)}
-@media (max-width:860px){.mobnav{display:flex}}
-:root[data-view="phone"] .mobnav{display:flex}
+
+
 .mobnav a{flex:1;min-height:48px;display:flex;align-items:center;justify-content:center;
   font-size:13px;font-weight:500;color:var(--ink-3);text-decoration:none;position:relative}
 .mobnav a.on{color:var(--ink);font-weight:600}
@@ -874,6 +877,36 @@ h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .pv .rphrase{font-size:9px}
 .pv .rbody{font-size:12.5px;line-height:1.5}
 .pv .rmeta{font-size:11.5px}
+
+/* ============================================================
+   PHONE PASS — header stacks, search full-width, no focus zoom
+   ============================================================ */
+@media (max-width:740px){
+  .hdr-in{flex-wrap:wrap;gap:8px 10px;padding-top:9px;padding-bottom:10px;min-height:0}
+  .hdr-in .brand{margin-right:auto}
+  .hdr .searchwrap{order:3;flex:0 0 100%;max-width:none}
+  .hdr .searchbar input{min-height:44px;font-size:16px}
+  .field input[type=text],.field input[type=number],.field input[type=search],
+  .field input[type=email],.field select,.field textarea,.facets input,.sheet input,.sheet select,.facet .pr input{font-size:16px}
+  .tabs-in .tab{font-size:14.5px;padding:0 10px;min-height:44px}
+  .util-in{min-height:30px;font-size:11px}
+}
+
+/* cleanup pass: doc chip, safety page, real pager */
+.docchip{display:inline-flex;gap:9px;align-items:center;border:1px dashed var(--rule);border-radius:8px;
+  padding:10px 14px;font-size:13.5px;color:var(--ink-2);background:var(--sunk)}
+.docchip svg{width:15px;height:15px;flex:none;color:var(--ink-3)}
+.docchip small{color:var(--ink-3);font-size:11px}
+.safelist ul{margin:0;padding-left:20px;display:grid;gap:10px}
+.safelist li{font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+.safelist li b{color:var(--ink)}
+.pager button{font:inherit;font-size:13.5px;color:var(--ink-2);background:var(--surface);
+  border:1px solid var(--rule);border-radius:8px;min-height:44px;min-width:44px;padding:0 12px;cursor:pointer}
+.pager button:hover{border-color:var(--ink-3);color:var(--ink)}
+.util-in a{color:#c9cdd2;text-decoration:none;font-size:11.5px;min-height:34px;display:inline-flex;align-items:center;padding:0 9px}
+.util-in a:hover{color:#fff}
+.foot a{color:#c9cdd2;text-decoration:underline;text-underline-offset:3px}
+.foot a:hover{color:#fff}
 </style>
 
 
@@ -1252,6 +1285,9 @@ const QS = new URLSearchParams(location.search);
 let F = { q:QS.get("q")||"", kinds:new Set(KINDS.some(k=>k.k===QS.get("kind"))?[QS.get("kind")]:[]), mfgs:new Set(), min:null, max:null, photos:false,
           model:"", pn:"", state:"", sort:"newest" };
 let sheetOpen = false, sortOpen = false;
+let PAGE = 1, LAST_SIG = "";
+const PER_PAGE = 10;
+function setPage(n){ PAGE = n; render(); const el=document.querySelector(".rtool"); if(el) el.scrollIntoView({block:"start"}); }
 let navAnim = false;   /* animate the page only on navigation, never on filter re-renders */
 let galIdx = 0;        /* current gallery photograph on a detail page */
 let MODE = "client";
@@ -1307,9 +1343,8 @@ function header(route){
     <div class="utility"><div class="util-in">
       <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.5 3 8 7.5 9.5 4.5-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4.5"/></svg>Trusted by pilots and owners since 1995.</span>
       <span class="sp"></span>
-      <button type="button" onclick="toast('Prototype — Buyer Protection is a concept page, not built yet')">Buyer Protection</button>
-      <button type="button" onclick="toast('Prototype — Seller Resources is a concept page, not built yet')">Seller Resources</button>
-      <button type="button" onclick="toast('Prototype — Help Center is a concept page, not built yet')">Help Center</button>
+      <a href="#/safety">Fraud &amp; Safety</a>
+      <a href="#/post">Seller Resources</a>
     </div></div>
     <div class="hdr-in">
       <a class="brand" href="index.html" aria-label="Barnstormers home">
@@ -1469,8 +1504,13 @@ function activeChips(){
    ============================================================ */
 function viewBrowse(){
   const r = results();
+  const sig = JSON.stringify([F.q,[...F.kinds],[...F.mfgs],F.min,F.max,F.photos,F.model,F.pn,F.state,F.sort]);
+  if(sig !== LAST_SIG){ PAGE = 1; LAST_SIG = sig; }
+  const nPages = Math.max(1, Math.ceil(r.length / PER_PAGE));
+  if(PAGE > nPages) PAGE = nPages;
+  const pageRows = r.slice((PAGE-1)*PER_PAGE, PAGE*PER_PAGE);
   const chips = activeChips();
-  const stream = r.length ? r.map((l,i)=>{
+  const stream = pageRows.length ? pageRows.map((l,i)=>{
     let out = row(l);
     if(i===4)  out += `<div class="rowslot">${slot("instream")}</div>`;
     if(i===9)  out += `<div class="rowslot">${slot("instream")}</div>`;
@@ -1527,11 +1567,14 @@ function viewBrowse(){
             <button class="btn btn-sm" type="button" onclick="saveSearch(this)">Save this search</button>
           </div>` : ""}
         <div class="stream">${stream}</div>
-        <nav class="pager" aria-label="Pagination">
-          <span class="lbl">Page 1</span>
-          <span class="cur">1</span><a href="#/browse">2</a><a href="#/browse">3</a>
-          <a href="#/browse">4</a><a href="#/browse">Next ›</a>
-        </nav>
+        ${nPages>1?`<nav class="pager" aria-label="Pagination">
+          <span class="lbl">Page ${PAGE} of ${nPages}</span>
+          ${PAGE>1?`<button type="button" onclick="setPage(${PAGE-1})">‹ Prev</button>`:""}
+          ${Array.from({length:nPages}).map((_,i)=>i+1===PAGE
+            ?`<span class="cur">${i+1}</span>`
+            :`<button type="button" onclick="setPage(${i+1})">${i+1}</button>`).join("")}
+          ${PAGE<nPages?`<button type="button" onclick="setPage(${PAGE+1})">Next ›</button>`:""}
+        </nav>`:""}
       </div>
     </div>
   </main>
@@ -1615,7 +1658,7 @@ function trustPanel(l){
   <section class="panel trust">
     <h3>About this advertiser</h3>
     <ul>${li.join("")}</ul>
-    <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+    <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/safety">How to buy safely →</a></span></p>
   </section>`;
 }
 
@@ -1683,7 +1726,7 @@ function viewDetail(id){
         </section>
         ${specBlock(l)}
         ${l.doc?`<section class="panel"><h3>Attached documents</h3><div class="pb">
-          <a class="btn" href="#/l/${l.id}">${IC.doc}<span>${esc(l.doc)}</span></a>
+          <span class="docchip">${IC.doc}<span>${esc(l.doc)}</span><small>attached by the advertiser</small></span>
           <p class="hint" style="margin-top:var(--s2)">Advertisers attach a specification or inventory sheet when the description runs past the character limit.</p>
         </div></section>`:""}
 
@@ -1736,6 +1779,40 @@ function viewDetail(id){
     <button class="btn icon js-save" data-id="${l.id}" type="button" aria-pressed="${saved.has(l.id)}"
             aria-label="Save to watchlist" onclick="toggleSave(${l.id})">${IC.bookmark}</button>
   </div>
+  ${footer()}`;
+}
+
+/* ============================================================
+   VIEW — FRAUD & SAFETY
+   ============================================================ */
+function viewSafety(){
+  return `
+  ${header("safety")}
+  <main class="page">
+    <nav class="crumb" aria-label="Breadcrumb">
+      <a href="index.html" class="bchome" aria-label="Barnstormers home">${IC.hangar}</a><span class="sep">›</span>
+      <span aria-current="page">Fraud &amp; Safety</span>
+    </nav>
+    <div class="pagehead"><h1>Buying safely on Barnstormers</h1>
+      <p class="pcount">Barnstormers connects you directly with advertisers. It does not verify sellers,
+      hold funds, or guarantee transactions — so a careful buyer does a few things every time.</p></div>
+    <section class="panel"><div class="pb safelist">
+      <ul>
+        <li><b>Verify the advertiser independently.</b> Look up the company, call a listed business number,
+            and confirm the aircraft or part actually exists before sending anything.</li>
+        <li><b>Never wire funds to someone you have not verified.</b> Wire transfers and payment apps are
+            nearly impossible to reverse. For large purchases, use escrow you arrange yourself.</li>
+        <li><b>Inspect before you pay.</b> For aircraft, a pre-purchase inspection by a mechanic you choose
+            is standard practice. For parts, ask for logbook entries, serial numbers and tags.</li>
+        <li><b>Be suspicious of below-market prices</b> and sellers who push urgency, refuse calls,
+            or want to move the conversation off the listing.</li>
+        <li><b>Report suspicious advertisements.</b> Every listing carries a report link, and reports are
+            reviewed by people.</li>
+      </ul>
+      <p class="hint" style="margin-top:var(--s3)">Always independently verify an advertiser before sending funds.</p>
+    </div></section>
+    <p style="margin-top:var(--s4)"><a class="btn" href="#/browse">Back to the marketplace</a></p>
+  </main>
   ${footer()}`;
 }
 
@@ -1823,6 +1900,7 @@ function viewHome(){
 
 function footer(){
   return `<footer class="foot">
+      <p class="note" style="margin-bottom:6px"><a href="#/safety">Fraud &amp; Safety</a> · <a href="https://eflyer.barnstormers.com" target="_blank" rel="noopener">eFLYER</a> · <a href="#/post">Place an advertisement</a></p>
       <p>Barnstormers.com — aviation's marketplace since 1995. Aircraft, parts, engines, hangars and airpark property, posted direct by owners, brokers and dealers.</p>
     </footer>`;
 }
@@ -2083,8 +2161,8 @@ function viewPost(){
           </div>
           <div class="pb" style="border-top:1px solid var(--rule-2)">
             <div class="chips">
-              <button class="btn btn-pri" type="button">${postTotal()?`Preview and pay $${postTotal()}.00`:"Publish free ad"}</button>
-              <button class="btn" type="button">Save as draft</button>
+              <button class="btn btn-pri" type="button" onclick="toast(postTotal()?'Demo checkout would continue here — $'+postTotal()+'.00 for 30 days':'Advertisement ready to publish — demo complete')">${postTotal()?`Preview and pay $${postTotal()}.00`:"Publish free ad"}</button>
+              <button class="btn" type="button" onclick="toast('Draft saved for this concept demo')">Save as draft</button>
             </div>
             <p class="hint" style="margin-top:var(--s2)">Your ad runs for 30 days and can be renewed each month, which returns it to the top of the listings.</p>
           </div>
@@ -2284,7 +2362,7 @@ function viewHangar(tab){
             Show my telephone numbers on my advertisements
           </label>
         </div>
-        <button class="btn btn-pri" type="button">Save changes</button>
+        <button class="btn btn-pri" type="button" onclick="toast('Account details saved for this concept demo')">Save changes</button>
       </div></section>`;
   }
 
@@ -2357,7 +2435,7 @@ function viewSeller(id){
             ${s.showPhone?`<a class="btn" href="tel:${s.phone.replace(/[^0-9]/g,"")}">${IC.phone}<span style="font-family:var(--data)">${s.phone}</span></a>`:""}
             ${s.site?`<a class="btn" href="#/seller/${id}">${esc(s.site)}</a>`:""}
           </div>
-          <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+          <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/safety">How to buy safely →</a></span></p>
         </section>
         ${slot()}
       </aside>
@@ -2381,6 +2459,7 @@ function render(){
   else if(hg)                       app.innerHTML = viewHangar(hg[1]);
   else if(h.startsWith("#/search")) app.innerHTML = viewSearch();
   else if(h.startsWith("#/post"))   app.innerHTML = viewPost();
+  else if(h.startsWith("#/safety")) app.innerHTML = viewSafety();
   else if(h.startsWith("#/browse")) app.innerHTML = viewBrowse();
   else                              app.innerHTML = viewBrowse();
   /* Filter changes re-render the whole view, so the sheet has to be reopened
@@ -2455,16 +2534,36 @@ function openContact(id){
         <span class="loc">${esc(loc(s))}</span>
       </div>
       <div class="contactlist">
-        <button class="btn btn-pri" type="button">${IC.mail}<span>Send a message</span></button>
+        <button class="btn btn-pri" type="button" onclick="showInquiry(${l.id})">${IC.mail}<span>Send a message</span></button>
         ${s.showPhone
           ? `<a class="btn" href="tel:${s.phone.replace(/[^0-9]/g,"")}">${IC.phone}<span class="num">${s.phone}</span></a>`
           : ""}
         <button class="btn" type="button" onclick="closeContact()">${IC.bookmark}<span>Save this listing instead</span></button>
       </div>
       ${s.showPhone ? "" : `<p class="nophone">This advertiser has not published a telephone number. Messages reach them by email.</p>`}
-      <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/">How to buy safely →</a></span></p>
+      <p class="safety">${IC.info}<span>Barnstormers does not verify sellers or guarantee transactions. <a href="#/safety">How to buy safely →</a></span></p>
     </div>`;
   box.classList.add("open");
+}
+function showInquiry(id){
+  const l=D.find(x=>x.id===id); if(!l) return;
+  const s=l.seller;
+  const box=document.getElementById("contact");
+  box.querySelector(".body").innerHTML = `
+      <div class="sh"><b>Message ${esc(s.company||s.name)}</b>
+        <button class="btn btn-sm" type="button" onclick="closeContact()">Close</button></div>
+      <div class="pb">
+        <p class="hint" style="margin:0 0 var(--s3)">Regarding: <b>${esc(l.title)}</b> · ${esc(loc(s))}</p>
+        <div class="fieldrow">
+          <div class="field"><label for="iqn">Your name</label><input type="text" id="iqn"></div>
+          <div class="field"><label for="iqe">Your email</label><input type="email" id="iqe"></div>
+        </div>
+        <div class="field"><label for="iqm">Message</label>
+          <textarea id="iqm" placeholder="I am interested in this advertisement…"></textarea></div>
+        <button class="btn btn-pri" type="button"
+          onclick="closeContact();toast('Inquiry prepared — nothing is sent in this concept demo')">
+          ${IC.mail}<span>Send inquiry</span></button>
+      </div>`;
 }
 function closeContact(){ const b=document.getElementById("contact"); if(b) b.classList.remove("open"); }
 document.addEventListener("keydown",function(e){

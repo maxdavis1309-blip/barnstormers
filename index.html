@@ -4,6 +4,15 @@
 <title>Barnstormers</title>
 <meta name="description" content="Barnstormers redesign concept — a modern aviation marketplace for aircraft, parts, engines, hangars and property.">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f1ede3">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2060%2038'%3E%3Cpath%20fill='%23c2351b'%20d='M2%2026C14%2020%2030%2010%2058%202L46%2014C36%2021%2022%2026%2010%2028Z'/%3E%3Cpath%20fill='%23c2351b'%20opacity='.55'%20d='M6%2034C16%2030%2028%2024%2044%2018L36%2027C28%2032%2018%2034%2010%2035Z'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://maxdavis1309-blip.github.io/barnstormers/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Barnstormers — Modern Aviation Marketplace Concept">
+<meta property="og:description" content="A redesign concept for Barnstormers: aircraft, parts, engines, hangars and property in a cleaner marketplace experience.">
+<meta property="og:image" content="https://maxdavis1309-blip.github.io/barnstormers/assets/hero.jpg">
+<meta property="og:url" content="https://maxdavis1309-blip.github.io/barnstormers/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,420;0,9..144,560;1,9..144,380;1,9..144,480&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Geist+Mono:wght@400;500;600&display=swap">
@@ -233,11 +242,15 @@ a{color:inherit}
   .stats{gap:18px 34px}
 }
 @media (max-width:1080px){
-  .nav nav{display:none}
+  .nav-in{flex-wrap:wrap;gap:0 18px;padding-top:6px;padding-bottom:2px;min-height:0}
+  .nav nav{order:3;flex-basis:100%;margin:0;overflow-x:auto;scrollbar-width:none;gap:0}
+  .nav nav::-webkit-scrollbar{display:none}
+  .nav nav a{padding:0 10px;font-size:11px}
   .explore{position:static;width:auto;margin:26px 0 0}
-  .hero-photo{position:static;height:230px;left:0;border-radius:8px;overflow:hidden;margin:26px 0 0}
+  .hero{display:flex;flex-direction:column}
+  .hero-in{order:1;min-height:0;padding-bottom:8px}
+  .hero-photo{order:2;position:static;height:210px;left:0;border-radius:8px;overflow:hidden;margin:0 28px 30px}
   .hero-photo::before{display:none}
-  .hero-in{min-height:0;padding-bottom:36px}
 }
 @media (max-width:660px){
   .pickgrid,.zonegrid{grid-template-columns:1fr}
@@ -322,9 +335,9 @@ a{color:inherit}
 <div class="trust">
   <div class="trust-in">
     <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.5 3 8 7.5 9.5 4.5-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4.5"/></svg>
-      <div><b>Trust &amp; Transparency</b> <span>Real listings. Real sellers.</span></div></div>
+      <div><b>Direct from Owners, Brokers &amp; Dealers</b> <span>Listings posted by the people selling them.</span></div></div>
     <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3.5-4 3 2.5L19 8"/></svg>
-      <div><b>Market Insights</b> <span>Data you can use.</span></div></div>
+      <div><b>Serving Aviation Since 1995</b> <span>107 categories, one marketplace.</span></div></div>
     <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8.5" r="3"/><path d="M3.5 19c1-2.8 3-4.2 5.5-4.2s4.5 1.4 5.5 4.2M16 4.5a3 3 0 0 1 0 8M17.5 15c1.9.5 3.2 1.8 3.9 4"/></svg>
       <div><b>Reach the Right Buyers</b> <span>List with confidence.</span></div></div>
   </div>
@@ -422,8 +435,8 @@ a{color:inherit}
     <div>
       <h2>Stay in the Know</h2>
       <p class="bsub">Market trends, new listings, and aviation news — delivered twice weekly.</p>
-      <form class="sub-form" action="demo.html#/">
-        <input type="email" placeholder="Enter your email" aria-label="Email address">
+      <form class="sub-form" onsubmit="this.querySelector('button').textContent='Subscribed \u2713';this.querySelector('button').disabled=true;return false">
+        <input type="email" required placeholder="Enter your email" aria-label="Email address">
         <button type="submit">Subscribe</button>
       </form>
     </div>
@@ -445,8 +458,8 @@ a{color:inherit}
 
 <footer class="legal">
   <div class="legal-in">
-    <span>© 1995–2026 Barnstormers. Homepage redesign concept.</span>
-    <span class="mono">CONCEPT PROTOTYPE · REAL LISTINGS, SAMPLE IMAGERY</span>
+    <span>© 1995–2026 Barnstormers. Homepage redesign concept. · <a href="demo.html#/safety" style="color:inherit">Fraud &amp; Safety</a></span>
+    <span class="mono">DESIGN CONCEPT · REAL LISTINGS, SAMPLE IMAGERY</span>
   </div>
 </footer>
 </html>
