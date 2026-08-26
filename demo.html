@@ -840,6 +840,10 @@ h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .rprice{font-size:17px}
 .rphrase{border:1px solid var(--magenta);color:var(--accent-text);background:none;font-family:var(--data);
   font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.mimg.photo{overflow:hidden;padding:0}
+.mimg.photo img{width:100%;height:100%;object-fit:cover}
+.photos .p.photo{overflow:hidden;padding:0}
+.photos .p.photo img{width:100%;height:100%;object-fit:cover;display:block}
 .rmeta .loc{display:inline-flex;gap:5px;align-items:center}
 .rmeta .loc svg{width:12px;height:12px}
 .rseller{border-left:1px solid var(--rule-2);padding:6px 0 6px 16px;display:flex;flex-direction:column;gap:3px;
@@ -1172,6 +1176,9 @@ const PHOTOS = {   /* sample imagery, disclosed on the homepage */
   2068711:"assets/sr22.jpg",     2068101:"assets/thumb_sr22t.jpg",
   2068700:"assets/hangar.jpg"
 };
+const GAL = id => PHOTOS[id]
+  ? [PHOTOS[id], `assets/g/${id}_1.jpg`, `assets/g/${id}_2.jpg`, `assets/g/${id}_3.jpg`]
+  : null;
 function phBox(l,i,cls){
   if(i===0 && PHOTOS[l.id])
     return `<span class="${cls||'ph'} photo"><img src="${PHOTOS[l.id]}" alt="" loading="lazy"></span>`;
@@ -1422,7 +1429,7 @@ function facetPanel(){
       <h4>Manufacturer</h4>
       <ul>${[...new Set(D.map(l=>l.mfg).filter(Boolean))].sort().map(m=>`
         <li><label>
-          <input type="checkbox" ${F.mfgs.has(m)?"checked":""} onchange="tog('mfgs',${JSON.stringify(m)})">
+          <input type="checkbox" ${F.mfgs.has(m)?"checked":""} onchange="tog('mfgs',${esc(JSON.stringify(m))})">
           ${esc(m)}<span class="ct">${countFor("mfg",m)}</span>
         </label></li>`).join("")}
       </ul>
@@ -1439,7 +1446,7 @@ function facetPanel(){
 function activeChips(){
   const c=[];
   F.kinds.forEach(k=>c.push(`<button class="chip" aria-pressed="true" onclick="tog('kinds','${k}')">${kindLabel(k)} <span class="x">×</span></button>`));
-  F.mfgs.forEach(m=>c.push(`<button class="chip" aria-pressed="true" onclick="tog('mfgs',${JSON.stringify(m)})">${esc(m)} <span class="x">×</span></button>`));
+  F.mfgs.forEach(m=>c.push(`<button class="chip" aria-pressed="true" onclick="tog('mfgs',${esc(JSON.stringify(m))})">${esc(m)} <span class="x">×</span></button>`));
   if(F.min!=null||F.max!=null) c.push(`<button class="chip" aria-pressed="true" onclick="clearPrice()">${F.min!=null?money(F.min):"$0"} – ${F.max!=null?money(F.max):"any"} <span class="x">×</span></button>`);
   if(F.photos) c.push(`<button class="chip" aria-pressed="true" onclick="togPhotos()">Has photos <span class="x">×</span></button>`);
   return c;
@@ -1487,7 +1494,7 @@ function viewBrowse(){
       <div>
         ${featBand("strip")}
         <div class="rtool">
-          <h2 class="rcount">${r.length} Results</h2>
+          <h2 class="rcount">${r.length} Result${r.length===1?"":"s"}</h2>
           <button class="btn filterbtn" type="button" onclick="openSheet()">
             ${IC.list}<span>Filters${activeCount()?" ("+activeCount()+")":""}</span>
           </button>
@@ -1603,7 +1610,7 @@ function trustPanel(l){
 function miniList(items){
   return `<div class="mini">${items.map(l=>`
     <a href="#/l/${l.id}">
-      <span class="mimg" style="background:${tone(l.id,0)}">${kindIcon(l.kind)}</span>
+      <span class="mimg${PHOTOS[l.id]?" photo":""}" style="background:${tone(l.id,0)}">${PHOTOS[l.id]?`<img src="${PHOTOS[l.id]}" alt="" loading="lazy">`:kindIcon(l.kind)}</span>
       <span><span class="mt">${esc(l.title)}</span>
         <span class="ms">${esc(loc(l.seller))} · ${esc(l.posted)}</span></span>
       <span class="mp ${l.price==null?"none":""}">${l.price==null?"No price":money(l.price)}</span>
@@ -1614,16 +1621,18 @@ function viewDetail(id){
   const l = D.find(x=>x.id===id);
   if(!l) return header("browse")+`<main class="page"><div class="empty"><b>Listing not found.</b><a class="btn" href="#/browse">Back to browse</a></div></main>`;
   const hasPh=l.photos>0;
+  const gset = GAL(l.id);
+  const nThumb = gset ? Math.min(gset.length, l.photos) : Math.min(l.photos,8);
   const gallery = hasPh ? `
     <div class="gal">
-      <div class="main" id="galmain" style="background:${tone(l.id,0)}">${PHOTOS[l.id]?`<img src="${PHOTOS[l.id]}" alt="${esc(l.title)} — sample imagery">`:kindIcon(l.kind)}</div>
+      <div class="main" id="galmain" style="background:${tone(l.id,0)}">${gset?`<img src="${gset[0]}" alt="${esc(l.title)} — sample imagery">`:kindIcon(l.kind)}</div>
       <p class="galcount"><span id="galpos">Photograph 1 of ${l.photos}</span>
         <span>${l.photos} in this advertisement</span></p>
       <div class="strip">
-        ${Array.from({length:Math.min(l.photos,8)}).map((_,i)=>`
+        ${Array.from({length:nThumb}).map((_,i)=>`
           <button type="button" aria-current="${i===0}" aria-label="Photograph ${i+1} of ${l.photos}"
-            style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${PHOTOS[l.id]&&i===0?`<img src="${PHOTOS[l.id]}" alt="">`:kindIcon(l.kind)}</button>`).join("")}
-        ${l.photos>8?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent">+${l.photos-8}</button>`:""}
+            style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${gset?`<img src="${gset[i]}" alt="">`:kindIcon(l.kind)}</button>`).join("")}
+        ${l.photos>nThumb?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent">+${l.photos-nThumb}</button>`:""}
       </div>
     </div>` : `
     <div class="gal">
@@ -1995,7 +2004,7 @@ function viewPost(){
           <div class="pb">
             <p class="hint" style="margin:0 0 var(--s3)">Choose up to ${MAX_CATS}. Your advertisement appears in each one, and each is a place buyers browse.</p>
             ${P.cats.length?`<div class="chips" style="margin-bottom:var(--s3)">
-              ${P.cats.map(c=>`<button class="chip" type="button" aria-pressed="true" onclick="toggleCat(${JSON.stringify(c)})">${esc(c)} <span class="x">×</span></button>`).join("")}
+              ${P.cats.map(c=>`<button class="chip" type="button" aria-pressed="true" onclick="toggleCat(${esc(JSON.stringify(c))})">${esc(c)} <span class="x">×</span></button>`).join("")}
             </div>`:""}
             <div class="field" style="margin-bottom:var(--s2)">
               <input type="search" placeholder="Find a category…" value="${esc(P.catq)}"
@@ -2016,7 +2025,7 @@ function viewPost(){
               : `<div class="drop"><b>Drag photographs here, or choose files</b>
                    <span>Up to 20. Add them all at once — no need to upload one at a time.</span></div>
                  <div class="photos">
-                   ${Array.from({length:P.photos}).map((_,i)=>`<span class="p" style="background:${tone(7,i)}">${IC.plane}</span>`).join("")}
+                   ${Array.from({length:P.photos}).map((_,i)=>{const UP=["assets/skyhawk.jpg","assets/sr22.jpg","assets/bonanza.jpg","assets/seneca.jpg","assets/skylane.jpg","assets/da40.jpg"];return `<span class="p photo"><img src="${UP[i%UP.length]}" alt="Uploaded photograph ${i+1}"></span>`}).join("")}
                    <button class="btn" type="button" onclick="addPhotos()" style="height:50px;min-height:50px">+ Add</button>
                  </div>
                  <p class="hint">${P.photos} of 20 added.</p>`}
@@ -2139,7 +2148,7 @@ function catPickHtml(){
   return list.map(c=>{
     const on=P.cats.indexOf(c)>-1;
     return `<button type="button" class="catopt" aria-pressed="${on}" ${(!on&&full)?"disabled":""}
-      onclick="toggleCat(${JSON.stringify(c)})">${esc(c)}</button>`;
+      onclick="toggleCat(${esc(JSON.stringify(c))})">${esc(c)}</button>`;
   }).join("");
 }
 function paintCats(){
@@ -2485,10 +2494,11 @@ function pickPhoto(id,i,btn){
   galIdx = i;
   const l = D.find(x=>x.id===id);
   const main = document.getElementById("galmain");
+  const gset = GAL(id);
   if(main){
     main.style.background = tone(id,i);
-    main.innerHTML = (PHOTOS[id] && i===0)
-      ? `<img src="${PHOTOS[id]}" alt="">`
+    main.innerHTML = (gset && gset[i])
+      ? `<img src="${gset[i]}" alt="">`
       : kindIcon(l ? l.kind : "aircraft");
   }
   const pos = document.getElementById("galpos");
