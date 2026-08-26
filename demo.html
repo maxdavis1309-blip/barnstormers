@@ -19,14 +19,14 @@
    cards reserved for paid placement, 44px targets.
    ============================================================ */
 :root{
-  --paper:#f7f6f3;            /* page background (muted well) */
+  --paper:#f1ede3;            /* page background (muted well) */
   --surface:#ffffff;          /* cards */
-  --sunk:#f0eee9;             /* muted */
-  --ink:#141821;              /* foreground */
-  --ink-2:#3d434f;            /* secondary text */
-  --ink-3:#5d6470;            /* muted-foreground */
-  --rule:#e4e2dc;             /* border */
-  --rule-2:#eeece7;           /* subtle border */
+  --sunk:#ece7dc;             /* muted */
+  --ink:#212428;              /* foreground */
+  --ink-2:#43474d;            /* secondary text */
+  --ink-3:#5c6167;            /* muted-foreground */
+  --rule:#e0dbd0;             /* border */
+  --rule-2:#e9e5db;           /* subtle border */
 
   /* brand accent — Creative Tim orange (token keeps its legacy name) */
   --magenta:#c2351b;          /* orange-600 */
@@ -734,6 +734,23 @@ h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
 .ph svg{opacity:.5}
 .gal .main{color:#474753}
 .gal .main svg{opacity:.38}
+/* header, section heads, footer: match locked homepage */
+.hdr{background:#fbf8f3}
+.brand svg.wing{background:transparent;color:var(--magenta);width:36px;height:23px;padding:0;border-radius:0}
+.navlinks a{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.mobnav a{font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.sechead h2{font-family:var(--data);font-size:12.5px;letter-spacing:.22em;text-transform:uppercase}
+.sechead h2::before{display:none}
+.foot{background:#202425;border-top:0}
+.foot p{color:#9aa1a8}
+/* real photography in cards, rows and gallery */
+.ph.photo{padding:0;overflow:hidden}
+.ph.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.feat .img.photo img{width:100%;height:100%;object-fit:cover}
+.gal .main{overflow:hidden}
+.gal .main img{width:100%;height:100%;object-fit:cover}
+.gal .strip button{overflow:hidden;padding:0}
+.gal .strip button img{width:100%;height:100%;object-fit:cover}
 /* editorial sky hero on the app home */
 .hero.compact{background:linear-gradient(150deg,#e3ebf5 0%,#f4e8d6 55%,#f1dcbd 100%);border-color:#e9dfcd}
 .hero.compact .searchbar.big{background:#fff}
@@ -1042,7 +1059,17 @@ function tone(id,i){ const SKIES=[
   "linear-gradient(150deg,#dcd7e4 0%,#efd7bd 100%)",               /* dusk */
   ]; return SKIES[(id*37+i*61)%4]; }
 function tone_unused(id,i){ const h=(id*37+i*61)%12; return `color-mix(in srgb, var(--ink) ${4+h}%, var(--sunk))`; }
+const PHOTOS = {   /* sample imagery, disclosed on the homepage */
+  2068778:"assets/c206.jpg",     2068709:"assets/skylane.jpg",
+  2067412:"assets/skyhawk.jpg",  2068320:"assets/seneca.jpg",
+  2066140:"assets/bonanza.jpg",  2067788:"assets/sr22sunset.jpg",
+  2059014:"assets/da40.jpg",     2058220:"assets/da40hangar.jpg",
+  2068711:"assets/sr22.jpg",     2068101:"assets/thumb_sr22t.jpg",
+  2068700:"assets/hangar.jpg"
+};
 function phBox(l,i,cls){
+  if(i===0 && PHOTOS[l.id])
+    return `<span class="${cls||'ph'} photo"><img src="${PHOTOS[l.id]}" alt="" loading="lazy"></span>`;
   return `<span class="${cls||'ph'}" style="background:${tone(l.id,i)}">${kindIcon(l.kind)}</span>`;
 }
 
@@ -1097,7 +1124,8 @@ function clip(s){
 /* ============================================================
    STATE
    ============================================================ */
-let F = { q:"", kinds:new Set(), mfgs:new Set(), min:null, max:null, photos:false,
+const QS = new URLSearchParams(location.search);
+let F = { q:QS.get("q")||"", kinds:new Set(KINDS.some(k=>k.k===QS.get("kind"))?[QS.get("kind")]:[]), mfgs:new Set(), min:null, max:null, photos:false,
           model:"", pn:"", state:"", sort:"newest" };
 let sheetOpen = false, sortOpen = false;
 let navAnim = false;   /* animate the page only on navigation, never on filter re-renders */
@@ -1148,7 +1176,7 @@ function header(route){
   <header class="hdr">
     <div class="hdr-in">
       <a class="brand" href="#/" aria-label="Barnstormers home">
-        ${IC.plane}
+        <svg class="wing" viewBox="0 0 60 38" fill="currentColor" aria-hidden="true"><path d="M2 26 C14 20 30 10 58 2 L46 14 C36 21 22 26 10 28 Z"/><path d="M6 34 C16 30 28 24 44 18 L36 27 C28 32 18 34 10 35 Z" opacity=".55"/></svg>
         <span class="wordmark">BARNSTORMERS<small>Aviation Marketplace</small></span>
       </a>
       <div class="searchwrap">
@@ -1192,7 +1220,7 @@ function featBand(variant){
     <div class="featgrid">
       ${FEATURED.map((f,i)=>`
         <a class="feat" href="#/l/${f.id}">
-          <span class="img" style="background:${tone(f.id,i)}">${kindIcon(f.k)}</span>
+          <span class="img${PHOTOS[f.id]?" photo":""}" style="background:${tone(f.id,i)}">${PHOTOS[f.id]?`<img src="${PHOTOS[f.id]}" alt="" loading="lazy">`:kindIcon(f.k)}</span>
           <span class="b">
             <span class="ft">${esc(f.t)}</span>
             <span class="fp">${money(f.p)}</span>
@@ -1450,13 +1478,13 @@ function viewDetail(id){
   const hasPh=l.photos>0;
   const gallery = hasPh ? `
     <div class="gal">
-      <div class="main" id="galmain" style="background:${tone(l.id,0)}">${kindIcon(l.kind)}</div>
+      <div class="main" id="galmain" style="background:${tone(l.id,0)}">${PHOTOS[l.id]?`<img src="${PHOTOS[l.id]}" alt="${esc(l.title)} — sample imagery">`:kindIcon(l.kind)}</div>
       <p class="galcount"><span id="galpos">Photograph 1 of ${l.photos}</span>
         <span>${l.photos} in this advertisement</span></p>
       <div class="strip">
         ${Array.from({length:Math.min(l.photos,8)}).map((_,i)=>`
           <button type="button" aria-current="${i===0}" aria-label="Photograph ${i+1} of ${l.photos}"
-            style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${kindIcon(l.kind)}</button>`).join("")}
+            style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${PHOTOS[l.id]&&i===0?`<img src="${PHOTOS[l.id]}" alt="">`:kindIcon(l.kind)}</button>`).join("")}
         ${l.photos>8?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent">+${l.photos-8}</button>`:""}
       </div>
     </div>` : `
@@ -2317,9 +2345,14 @@ function toggleSave(id){
 }
 function pickPhoto(id,i,btn){
   galIdx = i;
-  const main = document.getElementById("galmain");
-  if(main) main.style.background = tone(id,i);
   const l = D.find(x=>x.id===id);
+  const main = document.getElementById("galmain");
+  if(main){
+    main.style.background = tone(id,i);
+    main.innerHTML = (PHOTOS[id] && i===0)
+      ? `<img src="${PHOTOS[id]}" alt="">`
+      : kindIcon(l ? l.kind : "aircraft");
+  }
   const pos = document.getElementById("galpos");
   if(pos && l) pos.textContent = "Photograph "+(i+1)+" of "+l.photos;
   btn.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-current","false"));
