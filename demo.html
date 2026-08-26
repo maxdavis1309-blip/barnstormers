@@ -863,6 +863,17 @@ h1{font-family:var(--serif);font-weight:560;letter-spacing:-.01em}
   .hdractions a span{display:none}
   .hdractions a{padding:0 10px}
 }
+
+/* Sell-page live preview: the row component compacted to fit the pane */
+.pv .row,.pv .row.free{display:block;padding:12px 14px;border:0;border-radius:0;box-shadow:none}
+.pv .rmedia{margin:0 0 10px}
+.pv .ph.hero{height:112px}
+.pv .rseller{display:none}
+.pv .rtitle{font-size:15.5px}
+.pv .rprice{font-size:14px}
+.pv .rphrase{font-size:9px}
+.pv .rbody{font-size:12.5px;line-height:1.5}
+.pv .rmeta{font-size:11.5px}
 </style>
 
 
@@ -1169,6 +1180,7 @@ function tone(id,i){ const SKIES=[
   ]; return SKIES[(id*37+i*61)%4]; }
 function tone_unused(id,i){ const h=(id*37+i*61)%12; return `color-mix(in srgb, var(--ink) ${4+h}%, var(--sunk))`; }
 const PHOTOS = {   /* sample imagery, disclosed on the homepage */
+  0:"assets/skyhawk.jpg",        /* the Sell-page live preview */
   2068778:"assets/c206.jpg",     2068709:"assets/skylane.jpg",
   2067412:"assets/skyhawk.jpg",  2068320:"assets/seneca.jpg",
   2066140:"assets/bonanza.jpg",  2067788:"assets/sr22sunset.jpg",
