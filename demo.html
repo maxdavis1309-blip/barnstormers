@@ -1688,7 +1688,8 @@ function viewDetail(id){
         ${Array.from({length:nThumb}).map((_,i)=>`
           <button type="button" aria-current="${i===0}" aria-label="Photograph ${i+1} of ${l.photos}"
             style="background:${tone(l.id,i)}" onclick="pickPhoto(${l.id},${i},this)">${gset?`<img src="${gset[i]}" alt="">`:kindIcon(l.kind)}</button>`).join("")}
-        ${l.photos>nThumb?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent">+${l.photos-nThumb}</button>`:""}
+        ${l.photos>nThumb?`<button type="button" class="more" aria-label="Show remaining photographs" style="background:transparent"
+            onclick="toast('All ${l.photos} photographs appear on the live listing — this concept shows a sample')">+${l.photos-nThumb}</button>`:""}
       </div>
     </div>` : `
     <div class="gal">
@@ -1750,8 +1751,10 @@ function viewDetail(id){
 
         <section class="panel">
           <div class="secondary" style="border-top:0">
-            <button class="btn btn-sm" type="button">${IC.mail}<span>Recommend to a friend</span></button>
-            <button class="btn btn-sm" type="button">${IC.alert}<span>Report this advertisement</span></button>
+            <button class="btn btn-sm" type="button"
+              onclick="try{navigator.clipboard.writeText(location.href)}catch(e){};toast('Listing link copied to your clipboard')">${IC.mail}<span>Recommend to a friend</span></button>
+            <button class="btn btn-sm" type="button"
+              onclick="toast('Report prepared — reports are reviewed by people')">${IC.alert}<span>Report this advertisement</span></button>
           </div>
           
         </section>
@@ -1981,12 +1984,12 @@ function viewSearch(){
             <p class="hint" style="margin:0 0 var(--s3)">Barnstormers already emails new results for a saved search. This is that feature, given a place to live.</p>
             ${[["Cessna 172 under $150,000","Aircraft · Cessna · to $150,000","Daily"],
                ["O-470 cylinders and cores","Engines · Continental","Weekly"],
-               ["Hangars in the Pacific Northwest","Property · WA, OR","Daily"]].map(s=>`
+               ["Hangars in the Pacific Northwest","Property · WA, OR","Daily"]].map((s,i)=>removedSearches.has(i)?"":`
               <div class="manage" style="border:1px solid var(--rule);border-radius:2px;margin-bottom:var(--s2);background:var(--surface)">
                 <span class="st"><b>${s[0]}</b><br>${s[1]}</span>
                 <span class="expiry ok">${s[2]} email</span>
-                <button class="btn btn-sm" type="button">Edit</button>
-                <button class="btn btn-sm" type="button">Delete</button>
+                <button class="btn btn-sm" type="button" onclick="runSaved(${i})">Run</button>
+                <button class="btn btn-sm" type="button" onclick="removeSearch(${i})">Delete</button>
               </div>`).join("")}
           </div>
         </section>
@@ -2255,6 +2258,28 @@ function toggleCat(c){
 function setDoc(){ P.doc = P.doc ? null : "Specs_and_Inventory.pdf"; render(); }
 let sellerKind = "";
 function setSellerKind(k){ sellerKind = k; render(); }
+const removedSearches = new Set();
+const pausedSearches = new Set([2]);
+function togglePause(i){ pausedSearches.has(i)?pausedSearches.delete(i):pausedSearches.add(i); render();
+  toast(pausedSearches.has(i)?"Email alerts paused for this search":"Email alerts resumed"); }
+function removeSearch(i){ removedSearches.add(i); render(); toast("Saved search removed"); }
+function runSaved(i){
+  F.q=""; F.kinds.clear(); F.mfgs.clear(); F.min=null; F.max=null; F.photos=false;
+  F.model=""; F.pn=""; F.state="";
+  if(i===0){ F.q="Cessna 172"; F.max=150000; F.kinds.add("aircraft"); }
+  if(i===1){ F.q="O-470"; F.kinds.add("engines"); }
+  if(i===2){ F.kinds.add("property"); }
+  if(location.hash.startsWith("#/browse")) render(); else location.hash="#/browse";
+  toast("Saved search loaded");
+}
+function editAd(id, dup){
+  const l=D.find(x=>x.id===id); if(!l) return;
+  P.headline=l.title; P.price=l.price==null?"":String(l.price); P.kind=l.kind;
+  P.mfg=l.mfg||""; P.model=l.model||""; P.phrase=l.phrase||""; P.body=l.body||"";
+  P.tier=l.tier==="free"?"free":"upgraded"; P.photos=Math.min(l.photos||0,20);
+  location.hash="#/post";
+  toast(dup ? "Advertisement duplicated — change what differs" : "Advertisement loaded into the form — demo editing");
+}
 function renewAd(id){ renewed.add(id); render(); toast("Renewed — back at the top of the listings"); }
 function markSold(id){ sold.add(id); render(); toast("Marked sold"); }
 function renewExpiring(){
@@ -2303,8 +2328,8 @@ function viewHangar(tab){
             <span class="expiry ${soon&&!sold.has(l.id)?"":"ok"}">${sold.has(l.id)?"Marked sold":"Expires in "+days+" day"+(days===1?"":"s")}</span>
             <button class="btn btn-sm" type="button" onclick="renewAd(${l.id})"
               ${renewed.has(l.id)||sold.has(l.id)?"disabled":""}>${renewed.has(l.id)?"Renewed":"Renew"}</button>
-            <button class="btn btn-sm" type="button">Edit</button>
-            <a class="btn btn-sm" href="#/post">Duplicate</a>
+            <button class="btn btn-sm" type="button" onclick="editAd(${l.id},false)">Edit</button>
+            <button class="btn btn-sm" type="button" onclick="editAd(${l.id},true)">Duplicate</button>
             <button class="btn btn-sm" type="button" onclick="markSold(${l.id})"
               ${sold.has(l.id)?"disabled":""}>${sold.has(l.id)?"Sold":"Mark sold"}</button>
           </div>`;}).join("")}
@@ -2319,15 +2344,15 @@ function viewHangar(tab){
   } else if(tab==="searches"){
     body = `
       <p class="hint" style="margin-bottom:var(--s3)">Barnstormers already emails you new results for a saved search. Here they can be managed.</p>
-      ${[["Cessna 172 under $150,000","Aircraft · Cessna · to $150,000","Daily",true],
-         ["O-470 cylinders and cores","Engines · Continental","Weekly",true],
-         ["Hangars in the Pacific Northwest","Property · WA, OR","Paused",false]].map(s=>`
+      ${[["Cessna 172 under $150,000","Aircraft · Cessna · to $150,000"],
+         ["O-470 cylinders and cores","Engines · Continental"],
+         ["Hangars in the Pacific Northwest","Property · WA, OR"]].map((s,i)=>removedSearches.has(i)?"":`
         <div class="manage" style="border:1px solid var(--rule);border-radius:2px;margin-bottom:var(--s2);background:var(--surface)">
           <span class="st"><b>${s[0]}</b><br>${s[1]}</span>
-          <span class="expiry ${s[3]?"ok":""}">${s[2]}</span>
-          <button class="btn btn-sm" type="button">${s[3]?"Pause":"Resume"}</button>
-          <button class="btn btn-sm" type="button">Run</button>
-          <button class="btn btn-sm" type="button">Delete</button>
+          <span class="expiry ${pausedSearches.has(i)?"":"ok"}">${pausedSearches.has(i)?"Paused":"Daily email"}</span>
+          <button class="btn btn-sm" type="button" onclick="togglePause(${i})">${pausedSearches.has(i)?"Resume":"Pause"}</button>
+          <button class="btn btn-sm" type="button" onclick="runSaved(${i})">Run</button>
+          <button class="btn btn-sm" type="button" onclick="removeSearch(${i})">Delete</button>
         </div>`).join("")}`;
   } else if(tab==="billing"){
     body = `
